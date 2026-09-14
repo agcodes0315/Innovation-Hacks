@@ -1,0 +1,15 @@
+import { Router } from "express";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import { z } from "zod";
+import { prisma } from "../lib/prisma.js";
+import { requireAuth } from "../middleware/auth.js";
+const router=Router();
+const registerSchema=z.object({name:z.string().min(2).max(80),email:z.string().email(),password:z.string().min(8).max(72)});
+const loginSchema=z.object({email:z.string().email(),password:z.string().min(1)});
+const sign=(user)=>jwt.sign({id:user.id,email:user.email,name:user.name},process.env.JWT_SECRET,{expiresIn:"7d"});
+router.post("/register",async(req,res,next)=>{try{const parsed=registerSchema.safeParse(req.body); if(!parsed.success)return res.status(400).json({success:false,error:{message:"Validation failed",details:parsed.error.flatten()}}); const exists=await prisma.user.findUnique({where:{email:parsed.data.email}}); if(exists)return res.status(409).json({success:false,error:{message:"Email already registered"}}); const passwordHash=await bcrypt.hash(parsed.data.password,12); const user=await prisma.user.create({data:{name:parsed.data.name,email:parsed.data.email,passwordHash},select:{id:true,name:true,email:true,role:true}}); res.status(201).json({success:true,data:{user,token:sign(user)}});}catch(e){next(e);}});
+router.post("/login",async(req,res,next)=>{try{const parsed=loginSchema.safeParse(req.body); if(!parsed.success)return res.status(400).json({success:false,error:{message:"Invalid credentials"}}); const user=await prisma.user.findUnique({where:{email:parsed.data.email}}); if(!user||!(await bcrypt.compare(parsed.data.password,user.passwordHash)))return res.status(401).json({success:false,error:{message:"Invalid email or password"}}); const safe={id:user.id,name:user.name,email:user.email,role:user.role}; res.json({success:true,data:{user:safe,token:sign(safe)}});}catch(e){next(e);}});
+router.get("/me",requireAuth,async(req,res,next)=>{try{const user=await prisma.user.findUnique({where:{id:req.user.id},select:{id:true,name:true,email:true,role:true}}); res.json({success:true,data:user});}catch(e){next(e);}});
+router.post("/logout",requireAuth,(req,res)=>res.status(204).send());
+export default router;

@@ -1,0 +1,12 @@
+import { Router } from "express";
+import { prisma } from "../lib/prisma.js";
+import { validate } from "../middleware/validate.js";
+import { idSchema, userCreateSchema, userUpdateSchema } from "../validators/schemas.js";
+import { HttpError } from "../utils/httpError.js";
+const router = Router();
+router.get("/", async (req,res,next)=>{ try{res.json({success:true,data:await prisma.user.findMany({orderBy:{createdAt:"desc"}})});}catch(e){next(e);} });
+router.post("/", validate(userCreateSchema), async (req,res,next)=>{ try{res.status(201).json({success:true,data:await prisma.user.create({data:req.body})});}catch(e){next(e);} });
+router.get("/:id", validate(idSchema), async (req,res,next)=>{ try{const data=await prisma.user.findUnique({where:{id:req.params.id},include:{ownedProjects:true,assignedTasks:true}}); if(!data) throw new HttpError(404,"User not found"); res.json({success:true,data});}catch(e){next(e);} });
+router.patch("/:id", validate(userUpdateSchema), async (req,res,next)=>{ try{const exists=await prisma.user.findUnique({where:{id:req.params.id}}); if(!exists) throw new HttpError(404,"User not found"); res.json({success:true,data:await prisma.user.update({where:{id:req.params.id},data:req.body})});}catch(e){next(e);} });
+router.delete("/:id", validate(idSchema), async (req,res,next)=>{ try{await prisma.user.delete({where:{id:req.params.id}}); res.status(204).send();}catch(e){next(e);} });
+export default router;

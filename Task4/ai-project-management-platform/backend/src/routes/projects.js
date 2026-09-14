@@ -1,0 +1,12 @@
+import { Router } from "express";
+import { z } from "zod";
+import { prisma } from "../lib/prisma.js";
+import { requireAuth } from "../middleware/auth.js";
+const router=Router(); router.use(requireAuth);
+const schema=z.object({name:z.string().min(2).max(120),description:z.string().max(1000).default("")});
+router.get("/",async(req,res,next)=>{try{res.json({success:true,data:await prisma.project.findMany({where:{ownerId:req.user.id},include:{tasks:true},orderBy:{updatedAt:"desc"}})});}catch(e){next(e);}});
+router.post("/",async(req,res,next)=>{try{const p=schema.safeParse(req.body); if(!p.success)return res.status(400).json({success:false,error:{message:"Validation failed",details:p.error.flatten()}}); res.status(201).json({success:true,data:await prisma.project.create({data:{...p.data,ownerId:req.user.id}})});}catch(e){next(e);}});
+router.get("/:id",async(req,res,next)=>{try{const data=await prisma.project.findFirst({where:{id:req.params.id,ownerId:req.user.id},include:{tasks:{include:{assignee:true}}}}); if(!data)return res.status(404).json({success:false,error:{message:"Project not found"}}); res.json({success:true,data});}catch(e){next(e);}});
+router.patch("/:id",async(req,res,next)=>{try{const p=schema.partial().refine(v=>Object.keys(v).length).safeParse(req.body); if(!p.success)return res.status(400).json({success:false,error:{message:"Validation failed",details:p.error.flatten()}}); const exists=await prisma.project.findFirst({where:{id:req.params.id,ownerId:req.user.id}}); if(!exists)return res.status(404).json({success:false,error:{message:"Project not found"}}); res.json({success:true,data:await prisma.project.update({where:{id:req.params.id},data:p.data})});}catch(e){next(e);}});
+router.delete("/:id",async(req,res,next)=>{try{const result=await prisma.project.deleteMany({where:{id:req.params.id,ownerId:req.user.id}}); if(!result.count)return res.status(404).json({success:false,error:{message:"Project not found"}}); res.status(204).send();}catch(e){next(e);}});
+export default router;

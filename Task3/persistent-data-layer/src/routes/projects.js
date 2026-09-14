@@ -1,0 +1,12 @@
+import { Router } from "express";
+import { prisma } from "../lib/prisma.js";
+import { validate } from "../middleware/validate.js";
+import { idSchema, projectCreateSchema, projectUpdateSchema } from "../validators/schemas.js";
+import { HttpError } from "../utils/httpError.js";
+const router = Router();
+router.get("/", async (req,res,next)=>{try{res.json({success:true,data:await prisma.project.findMany({include:{owner:true,_count:{select:{tasks:true}}},orderBy:{createdAt:"desc"}})});}catch(e){next(e);}});
+router.post("/", validate(projectCreateSchema), async (req,res,next)=>{try{const owner=await prisma.user.findUnique({where:{id:req.body.ownerId}}); if(!owner) throw new HttpError(400,"ownerId does not reference an existing user"); res.status(201).json({success:true,data:await prisma.project.create({data:req.body})});}catch(e){next(e);}});
+router.get("/:id", validate(idSchema), async (req,res,next)=>{try{const data=await prisma.project.findUnique({where:{id:req.params.id},include:{owner:true,tasks:{include:{assignee:true}}}}); if(!data) throw new HttpError(404,"Project not found"); res.json({success:true,data});}catch(e){next(e);}});
+router.patch("/:id", validate(projectUpdateSchema), async (req,res,next)=>{try{const data=await prisma.project.update({where:{id:req.params.id},data:req.body}); res.json({success:true,data});}catch(e){next(e);}});
+router.delete("/:id", validate(idSchema), async (req,res,next)=>{try{await prisma.project.delete({where:{id:req.params.id}}); res.status(204).send();}catch(e){next(e);}});
+export default router;

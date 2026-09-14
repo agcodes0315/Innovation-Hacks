@@ -1,0 +1,13 @@
+import { Router } from "express";
+import { prisma } from "../lib/prisma.js";
+import { validate } from "../middleware/validate.js";
+import { idSchema, taskCreateSchema, taskUpdateSchema } from "../validators/schemas.js";
+import { HttpError } from "../utils/httpError.js";
+const router = Router();
+const mapDate = (body) => ({ ...body, ...(Object.prototype.hasOwnProperty.call(body,"dueDate") ? { dueDate: body.dueDate ? new Date(body.dueDate) : null } : {}) });
+router.get("/", async (req,res,next)=>{try{const where={}; if(req.query.status) where.status=req.query.status; if(req.query.projectId) where.projectId=req.query.projectId; if(req.query.assigneeId) where.assigneeId=req.query.assigneeId; if(req.query.q) where.OR=[{title:{contains:String(req.query.q),mode:"insensitive"}},{description:{contains:String(req.query.q),mode:"insensitive"}}]; res.json({success:true,data:await prisma.task.findMany({where,include:{project:true,assignee:true},orderBy:{createdAt:"desc"}})});}catch(e){next(e);}});
+router.post("/", validate(taskCreateSchema), async (req,res,next)=>{try{const project=await prisma.project.findUnique({where:{id:req.body.projectId}}); if(!project) throw new HttpError(400,"projectId does not reference an existing project"); if(req.body.assigneeId && !(await prisma.user.findUnique({where:{id:req.body.assigneeId}}))) throw new HttpError(400,"assigneeId does not reference an existing user"); res.status(201).json({success:true,data:await prisma.task.create({data:mapDate(req.body)})});}catch(e){next(e);}});
+router.get("/:id", validate(idSchema), async (req,res,next)=>{try{const data=await prisma.task.findUnique({where:{id:req.params.id},include:{project:true,assignee:true}}); if(!data) throw new HttpError(404,"Task not found"); res.json({success:true,data});}catch(e){next(e);}});
+router.patch("/:id", validate(taskUpdateSchema), async (req,res,next)=>{try{res.json({success:true,data:await prisma.task.update({where:{id:req.params.id},data:mapDate(req.body)})});}catch(e){next(e);}});
+router.delete("/:id", validate(idSchema), async (req,res,next)=>{try{await prisma.task.delete({where:{id:req.params.id}}); res.status(204).send();}catch(e){next(e);}});
+export default router;
