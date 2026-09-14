@@ -3,27 +3,15 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
-}
-
-enum TaskStatus {
-  TODO
-  IN_PROGRESS
-  DONE
-}
-
-enum TaskPriority {
-  LOW
-  MEDIUM
-  HIGH
 }
 
 model User {
   id            String    @id @default(uuid())
-  name          String    @db.VarChar(80)
-  email         String    @unique @db.VarChar(160)
-  role          String    @default("Developer") @db.VarChar(80)
+  name          String
+  email         String    @unique
+  role          String    @default("Developer")
   ownedProjects Project[] @relation("ProjectOwner")
   assignedTasks Task[]    @relation("TaskAssignee")
   createdAt     DateTime  @default(now())
@@ -32,8 +20,8 @@ model User {
 
 model Project {
   id          String   @id @default(uuid())
-  name        String   @db.VarChar(120)
-  description String   @default("") @db.VarChar(500)
+  name        String
+  description String   @default("")
   ownerId     String
   owner       User     @relation("ProjectOwner", fields: [ownerId], references: [id], onDelete: Restrict)
   tasks       Task[]
@@ -44,18 +32,18 @@ model Project {
 }
 
 model Task {
-  id          String       @id @default(uuid())
-  title       String       @db.VarChar(180)
-  description String       @default("") @db.VarChar(1000)
-  status      TaskStatus   @default(TODO)
-  priority    TaskPriority @default(MEDIUM)
+  id          String   @id @default(uuid())
+  title       String
+  description String   @default("")
+  status      String   @default("TODO")
+  priority    String   @default("MEDIUM")
   dueDate     DateTime?
   projectId   String
   assigneeId  String?
-  project     Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  assignee    User?        @relation("TaskAssignee", fields: [assigneeId], references: [id], onDelete: SetNull)
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  assignee    User?    @relation("TaskAssignee", fields: [assigneeId], references: [id], onDelete: SetNull)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   @@index([projectId])
   @@index([assigneeId])

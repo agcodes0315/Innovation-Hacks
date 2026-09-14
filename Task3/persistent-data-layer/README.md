@@ -1,22 +1,32 @@
 # Task 3 — Persistent Data Layer
 
-Task 2 API upgraded to PostgreSQL + Prisma.
+This task adds a real persistent SQLite database to the Users, Projects & Tasks API using Prisma ORM.
 
-## Data model
-- User owns Projects
-- Project has Tasks
-- Task optionally has an assignee User
-- Project deletion cascades to Tasks
-- User deletion is restricted while the user owns a Project; task assignee deletion sets the reference to null
+## Stack
+- Node.js
+- Express
+- Prisma ORM
+- SQLite
+- Zod
 
-## Run
-1. Create a PostgreSQL database named `devflow`.
-2. `npm install`
-3. `copy .env.example .env`
-4. Update `DATABASE_URL` in `.env`
-5. `npx prisma generate`
-6. `npx prisma migrate dev --name init`
-7. `npm run prisma:seed`
-8. `npm run dev`
+SQLite is file-based, completely free, requires no database server installation, and persists data in `prisma/dev.db`.
 
-Never commit `.env`; `.env.example` contains only placeholders.
+## Run on Windows PowerShell
+```powershell
+Copy-Item .env.example .env -Force
+npm install
+npx prisma generate
+npx prisma migrate dev --name init
+npm run prisma:seed
+npm run dev
+```
+
+API: `http://localhost:4000`
+Health: `http://localhost:4000/api/health`
+
+## View database
+```powershell
+npx prisma studio
+```
+
+Never commit `.env` or real secrets.

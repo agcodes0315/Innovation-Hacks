@@ -1,43 +1,46 @@
 # Task 4 — AI-Powered Project & Task Management Platform
 
-Capstone integration of frontend, Express REST API, PostgreSQL, authentication and AI-assisted task generation.
+Full-stack capstone combining authentication, project management, task management, persistent storage, dashboard metrics and local AI task generation.
 
-## Features
-- Registration, login, logout and JWT-protected API routes
-- Dashboard statistics
-- Project create/read/update/delete endpoints
-- Task create/update/delete, priority, status, due date, search and filter
-- AI-assisted task generation with Gemini
-- PostgreSQL + Prisma persistence
-- React frontend
+## Stack
+- React + Vite frontend
+- Node.js + Express backend
+- Prisma ORM + SQLite database
+- JWT + bcrypt authentication
+- Ollama local AI (no paid API key)
 
-## Backend setup
-```bash
+## Backend setup (Windows PowerShell)
+```powershell
 cd backend
+Copy-Item .env.example .env -Force
 npm install
-copy .env.example .env
 npx prisma generate
 npx prisma migrate dev --name init
 npm run dev
 ```
 
-Set `DATABASE_URL`, `JWT_SECRET`, and `GEMINI_API_KEY` in `backend/.env`. Never commit real values.
+Backend: `http://localhost:4000`
 
-## Frontend setup
-```bash
+## Frontend setup (second terminal)
+```powershell
 cd frontend
+Copy-Item .env.example .env -Force
 npm install
-copy .env.example .env
 npm run dev
 ```
 
-The frontend calls `http://localhost:4000/api` by default.
+Frontend: `http://localhost:5173`
 
-## Deployment
-Suggested split:
-- Frontend: Vercel or Netlify
-- Backend: Render or Railway
-- PostgreSQL: Neon, Railway or Render Postgres
+## Optional local AI setup
+Install Ollama once on Windows, then:
+```powershell
+ollama pull llama3.2:3b
+ollama serve
+```
+The AI endpoint uses the local model configured by `OLLAMA_MODEL` and requires no cloud API key.
 
-## AI feature
-`POST /api/ai/generate-tasks` accepts project name/description and returns structured task suggestions. The frontend can insert those suggestions as real persisted tasks.
+## Database inspection
+From `backend`:
+```powershell
+npx prisma studio
+```
