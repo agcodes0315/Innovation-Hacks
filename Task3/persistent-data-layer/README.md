@@ -1,32 +1,44 @@
 # Task 3 — Persistent Data Layer
 
-This task adds a real persistent SQLite database to the Users, Projects & Tasks API using Prisma ORM.
+This task uses **SQLite directly through Node.js**. No ORM and no external database service are required.
 
-## Stack
-- Node.js
-- Express
-- Prisma ORM
-- SQLite
-- Zod
+## Requirements
 
-SQLite is file-based, completely free, requires no database server installation, and persists data in `prisma/dev.db`.
+- Node.js 22.5+
+- npm
 
-## Run on Windows PowerShell
+## Run
+
 ```powershell
 Copy-Item .env.example .env -Force
 npm install
-npx prisma generate
-npx prisma migrate dev --name init
-npm run prisma:seed
 npm run dev
 ```
 
-API: `http://localhost:4000`
-Health: `http://localhost:4000/api/health`
+The database is created automatically at:
 
-## View database
-```powershell
-npx prisma studio
+```text
+data/devflow.db
 ```
 
-Never commit `.env` or real secrets.
+## Persistence demo
+
+1. Create a task with `POST /api/tasks`.
+2. Stop the API with `Ctrl+C`.
+3. Start it again with `npm run dev`.
+4. `GET /api/tasks` still returns the task.
+
+## Database relationships
+
+- User `1 -> many` Projects
+- Project `1 -> many` Tasks
+- User `1 -> many` assigned Tasks
+- Deleting a project cascades to its tasks.
+- Deleting a user is restricted while they own projects.
+- Deleting an assignee sets task assignment to `NULL`.
+
+## Reset local database
+
+```powershell
+npm run reset-db
+```

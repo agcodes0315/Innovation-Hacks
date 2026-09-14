@@ -1,58 +1,51 @@
 # Task 2 — Users, Projects & Tasks REST API
 
-Express REST API for the Innovation Hacks Full Stack Development Internship.
-
-## Features
-- User CRUD
-- Project CRUD and project task retrieval
-- Task CRUD
-- Dedicated task status endpoint
-- Search/filter task endpoint
-- Zod input validation
-- Centralized error handling
-- Correct HTTP status codes
-- Environment-based configuration
-
 ## Run
-```bash
+
+```powershell
+Copy-Item .env.example .env -Force
 npm install
-copy .env.example .env
 npm run dev
 ```
 
-Base URL: `http://localhost:4000/api`
+Health check: `http://localhost:4000/api/health`
 
 ## Endpoints
+
 ### Users
-- `GET /users`
-- `POST /users`
-- `GET /users/:id`
-- `PATCH /users/:id`
-- `DELETE /users/:id`
+- `GET /api/users`
+- `GET /api/users/:id`
+- `POST /api/users`
+- `PATCH /api/users/:id`
+- `DELETE /api/users/:id`
 
 ### Projects
-- `GET /projects`
-- `POST /projects`
-- `GET /projects/:id`
-- `PATCH /projects/:id`
-- `DELETE /projects/:id`
+- `GET /api/projects?q=&status=`
+- `GET /api/projects/:id`
+- `POST /api/projects`
+- `PATCH /api/projects/:id`
+- `DELETE /api/projects/:id`
 
 ### Tasks
-- `GET /tasks?status=&projectId=&assigneeId=&q=`
-- `POST /tasks`
-- `GET /tasks/:id`
-- `PATCH /tasks/:id`
-- `PATCH /tasks/:id/status`
-- `DELETE /tasks/:id`
+- `GET /api/tasks?q=&status=&priority=&projectId=`
+- `GET /api/tasks/:id`
+- `POST /api/tasks`
+- `PATCH /api/tasks/:id`
+- `PATCH /api/tasks/:id/status`
+- `DELETE /api/tasks/:id`
 
-## Example request
+Task 2 intentionally stores data in memory. Task 3 adds persistence.
+
+## Example task create body
+
 ```json
-POST /api/users
 {
-  "name": "Agrima Saxena",
-  "email": "agrima@example.com",
-  "role": "Developer"
+  "projectId": "p-demo",
+  "assigneeId": "u-demo",
+  "title": "Add API documentation",
+  "description": "Document all routes and examples.",
+  "status": "todo",
+  "priority": "high",
+  "dueDate": null
 }
 ```
-
-Task 2 intentionally uses in-memory data. Task 3 replaces this store with PostgreSQL so persistence can be demonstrated separately.
