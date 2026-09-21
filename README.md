@@ -710,8 +710,5 @@ SQLite keeps the project free, reproducible, persistent and independent of exter
 
 ⭐ **If you found the project useful or interesting, consider starring the repository.**
 
----
 
-### Work is scattered. Execution shouldn't be.
 
-**DevFlow turns four internship tasks into one connected product — from frontend, to API, to persistence, to AI-assisted execution.**
