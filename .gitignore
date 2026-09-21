@@ -1,5 +1,11 @@
 node_modules/
-dist/
+**/node_modules/
 .env
-.env.*
-!.env.example
+**/.env
+dist/
+**/dist/
+**/data/*.db
+**/data/*.db-shm
+**/data/*.db-wal
+.DS_Store
+npm-debug.log*
