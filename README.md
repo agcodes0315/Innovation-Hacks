@@ -1,134 +1,131 @@
 ⚡ DevFlow
 
-AI-Powered Developer Productivity & Project Management Platform
+AI-Powered Developer Execution Workspace
 
-A full-stack developer workspace for planning projects, managing tasks, tracking progress, preserving activity history, and generating project tasks with local AI.
+Plan work. Track execution. Preserve context. Generate the next steps locally with AI.
+
+DevFlow is a full-stack developer productivity platform built as one connected product across the four Innovation Hacks Full Stack Development Internship tasks.
+
+It addresses a practical developer problem: work is often scattered across notes, issue trackers, deadlines, status updates, and disconnected tools. DevFlow brings projects, tasks, progress, activity history, and AI-assisted planning into one lightweight workspace.
 
 
-Built as a connected four-stage full-stack development project for the Innovation Hacks Full Stack Development Internship.
 
-🚀 What DevFlow Does
 
-DevFlow is a developer-focused productivity workspace that evolves across four internship tasks:
 
-Task 1
-Responsive Developer Productivity Dashboard
-        |
-        v
-Task 2
-Users, Projects & Tasks REST API
-        |
-        v
-Task 3
-Persistent SQLite Data Layer
-        |
-        v
-Task 4
-AI-Powered Full-Stack Project & Task Management Platform
 
-Instead of treating each task as an isolated assignment, the project follows one continuous product architecture.
 
-DevFlow allows a user to:
+🌍 The Problem
 
-register and sign in securely
+Developers and small teams frequently lose time because project execution is fragmented across:
 
-create and manage projects
+task lists
 
-create and manage project tasks
+project notes
 
-assign priorities and due dates
+status updates
 
-move tasks between Todo, In Progress and Done
+deadlines
 
-search and filter tasks
+progress tracking
 
-view project completion progress
+activity history
 
-view dashboard statistics
+separate AI tools
 
-review recent workspace activity
+This creates context switching and makes it harder to answer simple questions:
 
-generate project-specific tasks using a local Ollama model
+What am I working on?
+What is blocked?
+What is already complete?
+What should I work on next?
+What changed recently?
+Can AI help me break a project into actionable work without sending project context to a cloud service?
 
-retain data across application restarts using SQLite
+💡 The Solution
 
-🖥️ Product at a Glance
+DevFlow combines project execution and productivity management into one local-first workspace.
 
-<img src="devflow-readme-assets/dashboard-overview.png"
-  alt="DevFlow Dashboard Overview"
-  width="100%"/>
+Projects
+   ↓
+Tasks + Priorities + Due Dates
+   ↓
+Execution Status
+   ↓
+Live Progress
+   ↓
+Activity History
+   ↓
+AI-Assisted Planning
 
-Product Capability
+The product supports:
 
-Implementation
+secure account registration and login
 
-Responsive frontend
+project creation, editing, viewing and deletion
 
-React + Vite
+task creation and management
 
-REST API
+Todo / In Progress / Done workflows
 
-Node.js + Express
+priority and due-date management
 
-Input validation
+search and filtering
 
-Zod
+live dashboard statistics
 
-Persistent database
+project completion percentages
 
-SQLite
+persistent recent activity
 
-Authentication
+SQLite-backed persistence
 
-JWT
+local AI-assisted task generation with Ollama
 
-Password security
+responsive desktop / tablet / mobile layouts
 
-bcryptjs
+🧭 Four-Task Engineering Journey
 
-Project management
+DevFlow was built incrementally rather than as four disconnected assignments.
 
-Create, view, edit, delete
+┌──────────────────────────────────────┐
+│ TASK 1                               │
+│ Developer Productivity Dashboard     │
+└──────────────────┬───────────────────┘
+                   ↓
+┌──────────────────────────────────────┐
+│ TASK 2                               │
+│ Users / Projects / Tasks REST API    │
+└──────────────────┬───────────────────┘
+                   ↓
+┌──────────────────────────────────────┐
+│ TASK 3                               │
+│ Persistent Relational Data Layer     │
+└──────────────────┬───────────────────┘
+                   ↓
+┌──────────────────────────────────────┐
+│ TASK 4                               │
+│ AI-Powered Full-Stack Platform       │
+└──────────────────────────────────────┘
 
-Task management
+01 — 🖥️ Developer Productivity Dashboard
 
-Create, update, delete, search, filter
+Frontend Foundation
 
-Progress tracking
+Task 1 established the product interface and reusable component system.
 
-Live project completion percentage
+Implemented
 
-Activity timeline
+dashboard / landing page
 
-Persistent recent activity
+navigation
 
-AI capability
-
-Local Ollama-assisted task generation
-
-Local-first development
-
-No external database required
-
-🧩 Internship Task Progression
-
-Task 1 — Developer Productivity Dashboard
-
-Task 1 establishes the product interface and interaction model.
-
-The dashboard includes:
-
-developer profile section
-
-clear navigation
+user profile section
 
 project cards
 
 task views
 
-project progress indicators
-
-productivity statistics
+progress indicators
 
 search and filtering
 
@@ -136,86 +133,100 @@ loading states
 
 empty states
 
-responsive desktop, tablet and mobile layouts
+responsive desktop / tablet / mobile behavior
 
 reusable React component architecture
 
-<img src="devflow-readme-assets/task1-dashboard.png"
-  alt="DevFlow Task 1 Developer Productivity Dashboard"
-  width="100%"/>
+Suggested Screenshot
 
-Task 2 — Users, Projects & Tasks REST API
+<img
+  src="devflow-readme-assets/task1-dashboard.png"
+  alt="DevFlow Task 1 Dashboard"
+  width="100%"
+/>
 
-Task 2 introduces the backend layer that powers application data.
+Key Contribution
+
+Designed a production-style developer dashboard with responsive layouts, reusable UI components, meaningful states, project visibility, task tracking, and productivity-focused interactions.
+
+02 — 🔌 Users, Projects & Tasks REST API
+
+Backend Foundation
+
+Task 2 introduced the backend contract used by later stages.
+
+API Capabilities
 
 Users
 
-GET    /api/users
-GET    /api/users/:id
-POST   /api/users
-PATCH  /api/users/:id
-DELETE /api/users/:id
+GET     /api/users
+GET     /api/users/:id
+POST    /api/users
+PATCH   /api/users/:id
+DELETE  /api/users/:id
 
 Projects
 
-GET    /api/projects
-GET    /api/projects/:id
-POST   /api/projects
-PATCH  /api/projects/:id
-DELETE /api/projects/:id
+GET     /api/projects
+GET     /api/projects/:id
+POST    /api/projects
+PATCH   /api/projects/:id
+DELETE  /api/projects/:id
 
 Tasks
 
-GET    /api/tasks
-GET    /api/tasks/:id
-POST   /api/tasks
-PATCH  /api/tasks/:id
-PATCH  /api/tasks/:id/status
-DELETE /api/tasks/:id
+GET     /api/tasks
+GET     /api/tasks/:id
+POST    /api/tasks
+PATCH   /api/tasks/:id
+PATCH   /api/tasks/:id/status
+DELETE  /api/tasks/:id
 
-Backend Engineering Included
+Engineering Included
 
-consistent REST endpoint design
+RESTful resource design
 
-input validation using Zod
+Zod validation
 
 centralized error handling
 
 meaningful HTTP status codes
 
-search and query filtering
-
-environment-based configuration
-
 structured JSON responses
 
-API documentation and examples
+query-based search and filtering
 
-<img src="devflow-readme-assets/task2-api.png"
+environment configuration
+
+API examples and documentation
+
+Suggested Screenshot
+
+<img
+  src="devflow-readme-assets/task2-api.png"
   alt="DevFlow Task 2 REST API"
-  width="100%"/>
+  width="100%"
+/>
 
-Task 3 — Persistent Data Layer
+Key Contribution
 
-Task 3 replaces temporary in-memory data with a real relational database.
+Built a structured REST API for users, projects and tasks with validation, filtering, consistent error responses and explicit HTTP semantics.
 
-DevFlow uses SQLite directly through Node.js.
+03 — 🗄️ Persistent Data Layer
 
-REST API
-   |
-   v
-Node.js + Express
-   |
-   v
+From Temporary Data to Real Persistence
+
+Task 3 replaced temporary in-memory data with a relational SQLite database.
+
+Express REST API
+       ↓
+Node.js Database Layer
+       ↓
 SQLite
-   |
-   +------ users
-   |
-   +------ projects
-   |
-   +------ tasks
+       ↓
+users / projects / tasks
 
-Relational Model
+Data Model
 
 User
  ├── owns many Projects
@@ -229,55 +240,73 @@ Task
  ├── belongs to one Project
  └── may belong to one User
 
-Database Features
-
-persistent local storage
+Database Engineering
 
 primary keys
 
-unique user email constraint
+unique email constraint
 
-project-owner relationship
+foreign-key relationships
 
-task-project relationship
-
-optional task assignee relationship
+project → task cascade deletion
 
 task status constraints
 
 priority constraints
 
-foreign keys
+indexes
 
-cascading project-task deletion
+schema-level checks
 
-indexes for common lookups
+persistent file-backed storage
 
-schema-level validation
+environment-configured database path
 
-environment-configured database file path
+Persistence Proof
 
-The application database is generated locally at:
+Create data
+   ↓
+Stop server
+   ↓
+Restart server
+   ↓
+Data still exists
 
-Task3/persistent-data-layer/data/devflow.db
+Suggested Screenshot
 
-<img src="devflow-readme-assets/task3-persistence.png"
-  alt="DevFlow Task 3 Persistent SQLite Data Layer"
-  width="100%"/>
+<img
+  src="devflow-readme-assets/task3-persistence.png"
+  alt="DevFlow Persistent SQLite Data Layer"
+  width="100%"
+/>
 
-🤖 Task 4 — AI-Powered Project & Task Management Platform
+Key Contribution
 
-Task 4 combines the frontend, REST API, authentication, database and AI capability into one full-stack application.
+Converted the REST API into a persistent relational system with explicit relationships, constraints and durable local storage.
 
-<img src="devflow-readme-assets/task4-dashboard.png"
-  alt="DevFlow Task 4 Full Stack Dashboard"
-  width="100%"/>
+04 — 🤖 AI-Powered Project & Task Management Platform
 
-Authentication
+Full-Stack Integration
 
-DevFlow supports:
+Task 4 brings all previous layers together.
 
-account registration
+React + Vite
+      ↓
+Protected Frontend
+      ↓
+Express REST API
+      ↓
+JWT + Validation
+      ↓
+SQLite
+      +
+Local Ollama AI
+
+🔐 Authentication
+
+DevFlow includes:
+
+registration
 
 login
 
@@ -285,22 +314,21 @@ logout
 
 bcrypt password hashing
 
-JWT-based authentication
+JWT token issuance
 
-protected backend endpoints
+protected API endpoints
 
 protected frontend routes
 
-Register / Login
-      |
-      v
-Password Hashing
-      |
-      v
-JWT Issued
-      |
-      v
-Protected Frontend + API Routes
+authenticated user data isolation
+
+Credentials
+   ↓
+bcrypt verification
+   ↓
+JWT
+   ↓
+Protected workspace
 
 📁 Project Management
 
@@ -312,35 +340,39 @@ edit projects
 
 delete projects
 
-open project details
+view project details
 
-set project status
+update project status
 
-track project task totals
+inspect task totals
 
-view completion percentages
+track completion percentage
 
-<img src="devflow-readme-assets/project-management.png"
+<img
+  src="devflow-readme-assets/project-management.png"
   alt="DevFlow Project Management"
-  width="100%"/>
+  width="100%"
+/>
 
 ✅ Task Management
 
-Tasks support:
+Tasks include:
 
 project association
 
-task title and description
+title
+
+description
 
 priority
 
 due date
 
-Todo status
+Todo
 
-In Progress status
+In Progress
 
-Done status
+Done
 
 search
 
@@ -348,37 +380,46 @@ status filtering
 
 priority filtering
 
-deletion
-
 persisted updates
 
-<img src="devflow-readme-assets/task-management.png"
+deletion
+
+<img
+  src="devflow-readme-assets/task-management.png"
   alt="DevFlow Task Management"
-  width="100%"/>
+  width="100%"
+/>
 
-📈 Dashboard & Progress Tracking
+📊 Live Progress Tracking
 
-The DevFlow dashboard summarizes the current workspace using live backend data.
+Dashboard metrics are calculated from backend data.
 
-Metrics include:
+Active Projects
+Total Tasks
+Completed Tasks
+In-Progress Tasks
 
-active projects
+Project completion is derived from:
 
-total tasks
+Completed Tasks / Total Project Tasks
 
-completed tasks
+Changing task status therefore updates both:
 
-tasks in progress
+dashboard statistics
 
-<img src="devflow-readme-assets/dashboard-stats.png"
-  alt="DevFlow Dashboard Statistics"
-  width="100%"/>
+project completion percentage
 
-🕒 Recent Activity
+<img
+  src="devflow-readme-assets/dashboard-overview.png"
+  alt="DevFlow Dashboard Overview"
+  width="100%"
+/>
 
-DevFlow stores a simple activity timeline for meaningful user actions.
+🕒 Workspace Activity
 
-Tracked actions can include:
+DevFlow keeps a persistent trail of meaningful actions.
+
+Examples:
 
 account creation
 
@@ -392,70 +433,83 @@ project deletion
 
 task creation
 
-task updates
+task update
 
 task deletion
 
-AI task generation
+AI generation
 
-<img src="devflow-readme-assets/recent-activity.png"
-  alt="DevFlow Recent Activity Timeline"
-  width="100%"/>
+<img
+  src="devflow-readme-assets/recent-activity.png"
+  alt="DevFlow Recent Activity"
+  width="100%"
+/>
 
-🧠 AI-Assisted Task Generation
+Key Contribution
 
-DevFlow includes a local AI-assisted project planning feature.
+Connected user actions across authentication, projects, tasks and AI into a persistent workspace activity timeline.
 
-<img src="devflow-readme-assets/ai-task-generation.png"
-  alt="DevFlow AI-Assisted Task Generation"
-  width="100%"/>
+🧠 Local AI-Assisted Task Planning
 
-The user selects a project and clicks:
+DevFlow can turn project context into actionable engineering tasks.
 
-AI Generate
-
-The backend prepares project context and passes it to the configured local Ollama model.
-
-Project Name + Description
-          |
-          v
-Task Planning Prompt
-          |
-          v
+Project Name
+      +
+Project Description
+      ↓
+Planning Prompt
+      ↓
 Local Ollama Model
-          |
-          v
+      ↓
 Structured Task Suggestions
-          |
-          v
+      ↓
 SQLite
-          |
-          v
-Dashboard
+      ↓
+Project Dashboard
 
 Default configuration:
 
 OLLAMA_URL=http://localhost:11434
 OLLAMA_MODEL=llama3.2:3b
 
-If Ollama is unavailable, DevFlow does not crash. The backend falls back to a deterministic project planner and labels the result as Fallback Planner rather than presenting it as AI output.
+The AI-generated tasks are saved into the project rather than shown as disposable chat output.
 
-🏗️ Full-Stack Architecture
+<img
+  src="devflow-readme-assets/ai-task-generation.png"
+  alt="DevFlow Local AI Task Generation"
+  width="100%"
+/>
+
+Failure-Safe AI Design
+
+If Ollama is unavailable, the product remains usable.
+
+The backend explicitly labels the result:
+
+FALLBACK PLANNER
+
+When the local model is available:
+
+LOCAL AI
+
+This avoids silently presenting deterministic fallback output as AI-generated content.
+
+🏗️ Architecture
 
 flowchart TD
     A[React + Vite Frontend]
-    B[Authentication UI]
+    B[Registration / Login]
     C[Dashboard]
-    D[Project Management]
-    E[Task Management]
-    F[AI Generate UI]
+    D[Projects]
+    E[Tasks]
+    F[AI Task Planner]
 
     G[Express REST API]
     H[JWT Authentication]
     I[Zod Validation]
-    J[Project and Task Services]
-    K[Activity Logging]
-    L[AI Task Generation]
+    J[Workspace Services]
+    K[Activity Logger]
+    L[AI Integration]
 
     M[(SQLite)]
     N[Local Ollama]
@@ -478,95 +532,57 @@ flowchart TD
     G --> K
     G --> L
 
-    J --> M
     H --> M
+    J --> M
     K --> M
     L --> M
     L --> N
 
-🔐 Security & Data Handling
+🛡️ Engineering & Security Decisions
 
-Concern
-
-DevFlow Approach
-
-Password storage
-
-bcrypt hashing
-
-Protected API access
-
-JWT bearer authentication
-
-Input validation
-
-Zod schemas
-
-Database relationships
-
-SQLite foreign keys
-
-Secrets/configuration
-
-.env files
-
-Public repository safety
-
-.env and database files ignored
-
-Invalid requests
-
-Centralized error responses
-
-User data isolation
-
-Project/task queries scoped to authenticated user
-
-⚙️ Key Engineering Decisions
-
-Challenge
+Problem
 
 DevFlow Approach
 
-Keep local setup simple
+Plain-text passwords are unsafe
 
-Built-in SQLite instead of an external DB server
+bcrypt password hashing
 
-Maintain real persistence
-
-File-backed relational database
-
-Protect user passwords
-
-bcrypt hashing
-
-Protect application routes
+Private routes need identity
 
 JWT authentication
 
-Prevent invalid writes
+Invalid writes can corrupt state
 
-Zod validation + DB constraints
+Zod + SQLite constraints
 
-Keep UI data current
+Frontend data must stay current
 
-Dashboard reloads live API state after mutations
+API-backed state refresh after mutations
 
-Support project planning
+Project/task relations must stay valid
 
-Local Ollama task generation
+Foreign keys
 
-Avoid AI failure breaking the product
+Data should survive restarts
+
+SQLite persistence
+
+AI should not require a paid cloud API
+
+Local Ollama model
+
+AI failure should not break the product
 
 Explicit fallback planner
 
-Maintain traceability
+User actions should be traceable
 
-Recent activity log
+Persistent recent activity
 
-Support different screen sizes
+Internship setup should stay reproducible
 
-Responsive custom CSS
+Local-first dependencies and .env.example
 
 🛠️ Tech Stack
 
@@ -576,23 +592,23 @@ Technology
 
 Frontend
 
-React 18, Vite
-
-UI
-
-Custom CSS, responsive dark interface
-
-Icons
-
-Lucide React
+React 18 + Vite
 
 Routing
 
 React Router
 
+Styling
+
+Custom responsive CSS
+
+Icons
+
+Lucide React
+
 Backend
 
-Node.js, Express
+Node.js + Express
 
 Validation
 
@@ -600,29 +616,29 @@ Zod
 
 Authentication
 
-JSON Web Tokens
+JWT
 
-Password Hashing
+Password Security
 
 bcryptjs
 
 Database
 
-SQLite via Node node:sqlite
+SQLite through Node node:sqlite
 
 AI
 
 Ollama local model
 
-API Style
+API
 
 REST
 
-Environment Configuration
+Configuration
 
 dotenv
 
-📡 API Surface — Final Platform
+📡 Final Platform API
 
 Authentication
 
@@ -630,25 +646,17 @@ Method
 
 Endpoint
 
-Purpose
-
 POST
 
 /api/auth/register
-
-Create account
 
 POST
 
 /api/auth/login
 
-Authenticate user
-
 GET
 
 /api/auth/me
-
-Return authenticated profile
 
 Dashboard
 
@@ -656,13 +664,9 @@ Method
 
 Endpoint
 
-Purpose
-
 GET
 
 /api/dashboard
-
-Statistics and recent activity
 
 Projects
 
@@ -670,37 +674,25 @@ Method
 
 Endpoint
 
-Purpose
-
 GET
 
 /api/projects
 
-List authenticated user's projects
-
 GET
 
 /api/projects/:id
-
-Project details and tasks
 
 POST
 
 /api/projects
 
-Create project
-
 PATCH
 
 /api/projects/:id
 
-Update project
-
 DELETE
 
 /api/projects/:id
-
-Delete project
 
 Tasks
 
@@ -708,31 +700,21 @@ Method
 
 Endpoint
 
-Purpose
-
 GET
 
 /api/tasks
-
-Search/filter tasks
 
 POST
 
 /api/tasks
 
-Create task
-
 PATCH
 
 /api/tasks/:id
 
-Update task
-
 DELETE
 
 /api/tasks/:id
-
-Delete task
 
 AI
 
@@ -740,15 +722,11 @@ Method
 
 Endpoint
 
-Purpose
-
 POST
 
 /api/ai/generate-tasks
 
-Generate and persist project tasks
-
-📁 Repository Structure
+🗂️ Repository Structure
 
 Innovation-Hacks/
 │
@@ -767,32 +745,30 @@ Innovation-Hacks/
 │       └── frontend/
 │
 ├── devflow-readme-assets/
+├── package.json
 └── README.md
 
-Generated .env files, node_modules, and SQLite database files should not be committed.
+▶️ Run Everything With One Command
 
-⚙️ Running Locally
-
-Requirements
-
-Node.js 22.5+
-npm
-
-Check your Node version:
-
-node -v
-
-Run All Tasks Together
+First-time setup
 
 From the repository root:
 
 cd "C:\Users\Lenovo\Desktop\Innovation Hacks"
 npm install
+npm --prefix "Task1/dashboard" install
+npm --prefix "Task2/users-projects-tasks-api" install
+npm --prefix "Task3/persistent-data-layer" install
+npm --prefix "Task4/ai-project-management-platform/backend" install
+npm --prefix "Task4/ai-project-management-platform/frontend" install
+
+After the dependencies have been installed once:
+
 npm run dev
 
-Development services:
+Services
 
-Service
+Component
 
 URL
 
@@ -800,7 +776,7 @@ Task 1 Dashboard
 
 http://localhost:5173
 
-Task 2 REST API
+Task 2 API
 
 http://localhost:4002/api/health
 
@@ -808,7 +784,7 @@ Task 3 Persistent API
 
 http://localhost:4003/api/health
 
-Task 4 Full-Stack Frontend
+Task 4 Frontend
 
 http://localhost:5174
 
@@ -816,136 +792,117 @@ Task 4 Backend
 
 http://localhost:4004/api/health
 
-Press Ctrl + C to stop all services.
+Stop everything:
 
-🤖 Running Local AI with Ollama
+Ctrl + C
 
-Install Ollama and pull the configured model:
+🤖 Enable the Real Local AI
 
 ollama pull llama3.2:3b
-
-Start the local server:
-
 ollama serve
 
 Verify:
 
 Invoke-RestMethod http://localhost:11434/api/tags
 
-Then open DevFlow and click AI Generate. When Ollama is connected, the result is labelled Local AI.
+Then click:
 
-🧪 Demonstrating Persistence
+AI Generate
 
-1. Register / sign in
-2. Create a project
-3. Create tasks
-4. Change task statuses
-5. Stop the backend
-6. Restart the backend
-7. Sign in again
-8. Confirm the same projects and tasks still exist
+inside DevFlow.
 
-📸 Suggested Product Screenshots
+📸 Portfolio Screenshot Plan
 
-Create this folder in the repository root:
+Create:
 
 devflow-readme-assets/
 
-Add:
+Recommended screenshots:
 
-dashboard-overview.png
-task1-dashboard.png
-task2-api.png
-task3-persistence.png
-task4-dashboard.png
-project-management.png
-task-management.png
-dashboard-stats.png
-recent-activity.png
-ai-task-generation.png
-auth-login.png
-responsive-mobile.png
+01-hero-dashboard.png
+02-authentication.png
+03-project-management.png
+04-task-workflow.png
+05-activity-log.png
+06-local-ai.png
+07-task2-api.png
+08-task3-persistence.png
+09-responsive-mobile.png
 
-Filename
+These can be reused both in the README and in a LinkedIn carousel.
 
-What to capture
+🎞️ Showcase Slide Ideas
 
-dashboard-overview.png
+01 — Developer Command Center
 
-Best populated Task 4 dashboard
+Subtitle: One workspace for project execution and engineering productivity.
 
-task1-dashboard.png
+Key contribution:
+Connected projects, task state and live progress into a responsive developer dashboard.
 
-Original Task 1 dashboard
+Tags:
 
-task2-api.png
+React   Responsive UI   Productivity
 
-Task 2 health or REST endpoint response
+02 — Full Task Workflow
 
-task3-persistence.png
+Subtitle: Tasks move from planning to execution without losing context.
 
-Task 3 persistent API / persistence proof
+Key contribution:
+Implemented priorities, due dates, status transitions, search, filtering and live project progress.
 
-task4-dashboard.png
+Tags:
 
-Final integrated application
+Task Management   REST API   SQLite
 
-project-management.png
+03 — Workspace Activity & Audit Trail
 
-Project cards, progress and actions
+Subtitle: A structured history of meaningful workspace actions.
 
-task-management.png
+Key contribution:
+Connected authentication, project, task and AI events to persistent recent activity.
 
-Search, filters, priority and status controls
+Tags:
 
-dashboard-stats.png
+Activity Logs   Persistence   Backend Integration
 
-Live summary metrics
+04 — Local AI Project Planner
 
-recent-activity.png
+Subtitle: Convert project context into actionable engineering tasks.
 
-Activity timeline
+Key contribution:
+Integrated local Ollama inference with project context and persisted generated tasks directly into the workspace.
 
-ai-task-generation.png
+Tags:
 
-Local AI generation result
+Local AI   Ollama   AI Task Generation
 
-auth-login.png
+05 — Persistent Data Layer
 
-Login or registration screen
+Subtitle: Project state survives server and application restarts.
 
-responsive-mobile.png
+Key contribution:
+Designed a relational SQLite model with foreign keys, constraints and durable project/task storage.
 
-Mobile-width responsive interface
+Tags:
 
-🎬 Suggested Demo Flow
-
-1. Introduce DevFlow and the four-task architecture
-2. Show registration/login
-3. Show dashboard statistics
-4. Create a project
-5. Add tasks
-6. Change Todo → In Progress → Done
-7. Show project progress update
-8. Demonstrate search and priority filters
-9. Show recent activity
-10. Generate tasks using local Ollama AI
-11. Restart the backend and prove persistence
-12. Briefly show Task 2 and Task 3 API health endpoints
+SQLite   Data Modeling   Persistence
 
 🎯 What This Project Demonstrates
 
-DevFlow brings together:
+DevFlow demonstrates:
 
-responsive frontend development
+frontend engineering
 
-reusable React components
+responsive UI design
+
+React component architecture
 
 REST API design
 
-input validation
+request validation
 
-HTTP status handling
+centralized errors
 
 relational data modelling
 
@@ -955,15 +912,15 @@ authentication
 
 password security
 
-protected application routes
+protected routes
 
-project management
+project CRUD
 
-task management
+task CRUD
 
 search and filtering
 
-dashboard analytics
+live analytics
 
 activity tracking
 
@@ -971,43 +928,55 @@ local AI integration
 
 full-stack system integration
 
-⚠️ Scope
+🚧 Current Scope
 
-DevFlow is an internship project and development prototype.
+DevFlow is an internship-scale full-stack product and local development prototype.
 
-The current SQLite implementation is intentionally optimized for simple local development, reproducible demos, persistent project data and minimal external infrastructure.
+SQLite keeps the project:
 
-For a larger multi-instance production deployment, the data layer could later be migrated to PostgreSQL or another server-based relational database.
+free
 
-🌱 Future Improvements
+reproducible
+
+persistent
+
+easy to run
+
+independent of external database services
+
+For a larger multi-instance production deployment, the same data model could be migrated to PostgreSQL.
+
+🌱 Planned Product Upgrades
+
+explicit task assignee selector
 
 multi-user project collaboration
 
-explicit task-assignee selector
-
-role-based permissions
-
-comments and task discussions
+workload view
 
 notifications
 
-calendar view
+security alerts
 
-advanced analytics
+dedicated audit-log page
+
+calendar and deadline view
+
+overdue-task detection
 
 AI task prioritization
 
-project summarization
+AI project summary
 
 AI productivity suggestions
 
 automated tests
 
-CI/CD workflow
+CI/CD
 
 cloud deployment
 
-PostgreSQL production migration
+PostgreSQL production data layer
 
 👩‍💻 Author
 
@@ -1015,16 +984,9 @@ Agrima Saxena
 
 Full-Stack Development · Applied AI · Backend Systems · Software Engineering
 
-<a href="https://www.linkedin.com/in/agrima-saxena-142960426/">
-<img src="https://img.shields.io/badge/LinkedIn-Agrima_Saxena-0A66C2?style=flat-square&logo=linkedin&logoColor=white"
-     alt="LinkedIn"/>
-</a>
 
-<a href="https://github.com/agcodes0315">
-<img src="https://img.shields.io/badge/GitHub-agcodes0315-181717?style=flat-square&logo=github&logoColor=white"
-     alt="GitHub"/>
-</a>
+
 
 Build. Innovate. Impact.
 
-DevFlow turns the internship's four technical tasks into one connected full-stack product journey — from interface, to API, to persistence, to AI-powered project execution.
+DevFlow turns four internship tasks into one connected product — from frontend, to API, to persistence, to AI-assisted execution.
