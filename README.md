@@ -5,13 +5,6 @@ AI-Powered Developer Productivity & Project Management Platform
 A full-stack developer workspace for planning projects, managing tasks, tracking progress, preserving activity history, and generating project tasks with local AI.
 
 
-
-
-
-
-
-<br/>
-
 Built as a connected four-stage full-stack development project for the Innovation Hacks Full Stack Development Internship.
 
 🚀 What DevFlow Does
