@@ -62,10 +62,6 @@ It brings projects, tasks, progress, activity history and local AI planning into
 
 ## 🖥️ Product at a Glance
 
-<img src="devflow-readme-assets/dashboard-overview.png"
-     alt="DevFlow Dashboard Overview"
-     width="100%"/>
-
 | Platform Signal | Result |
 |---|---:|
 | Internship tasks unified into one product | **4** |
@@ -117,10 +113,6 @@ It brings projects, tasks, progress, activity history and local AI planning into
 - responsive desktop / tablet / mobile behavior
 - reusable React component architecture
 
-<img src="devflow-readme-assets/task1-dashboard.png"
-     alt="DevFlow Task 1 Dashboard"
-     width="100%"/>
-
 ### 02 — 🔌 Users, Projects & Tasks REST API
 
 **Backend foundation.** Introduced the API contract used by every later stage.
@@ -151,10 +143,6 @@ Engineering included:
 - environment configuration
 - API examples and documentation
 
-<img src="devflow-readme-assets/task2-api.png"
-     alt="DevFlow Task 2 REST API"
-     width="100%"/>
-
 ### 03 — 🗄️ Persistent Relational Data Layer
 
 **From temporary data to real persistence.** Replaced in-memory data with a relational SQLite database.
@@ -177,10 +165,6 @@ users / projects / tasks
 ```text
 Create data -> Stop server -> Restart server -> Data still exists
 ```
-
-<img src="devflow-readme-assets/task3-persistence.png"
-     alt="DevFlow Persistent SQLite Data Layer"
-     width="100%"/>
 
 ### 04 — 🤖 AI-Powered Project & Task Management Platform
 
@@ -277,10 +261,6 @@ Users can:
 
 ## ✅ Task Management
 
-<img src="devflow-readme-assets/task-management.png"
-     alt="DevFlow Task Management"
-     width="100%"/>
-
 Each task carries:
 
 - project association
@@ -320,10 +300,6 @@ Changing a task's status therefore updates **both** the dashboard statistics and
 
 ## 🕒 Workspace Activity
 
-<img src="devflow-readme-assets/recent-activity.png"
-     alt="DevFlow Recent Activity"
-     width="100%"/>
-
 DevFlow keeps a persistent trail of meaningful actions:
 
 - account creation and login
@@ -336,10 +312,6 @@ Authentication, project, task and AI events all feed one persistent activity tim
 ---
 
 ## 🧠 Local AI-Assisted Task Planning
-
-<img src="devflow-readme-assets/ai-task-generation.png"
-     alt="DevFlow Local AI Task Generation"
-     width="100%"/>
 
 DevFlow turns project context into actionable engineering tasks.
 
