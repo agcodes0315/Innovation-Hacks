@@ -245,10 +245,6 @@ DevFlow includes:
 
 ## 📁 Project Management
 
-<img src="devflow-readme-assets/project-management.png"
-     alt="DevFlow Project Management"
-     width="100%"/>
-
 Users can:
 
 - create, edit and delete projects
