@@ -54,7 +54,7 @@ Can AI help me break a project into actionable work
 without sending project context to a cloud service?
 ```
 
-**DevFlow treats this as an execution-context problem — not just a to-do list problem.**
+**DevFlow treats this as an execution-context problem, not just a to-do list problem.**
 
 It brings projects, tasks, progress, activity history and local AI planning into one lightweight workspace.
 
@@ -100,7 +100,7 @@ It brings projects, tasks, progress, activity history and local AI planning into
 └──────────────────────────────────────┘
 ```
 
-### 01 — 🖥️ Developer Productivity Dashboard
+### 01: 🖥️ Developer Productivity Dashboard
 
 **Frontend foundation.** Established the product interface and reusable component system.
 
@@ -113,7 +113,7 @@ It brings projects, tasks, progress, activity history and local AI planning into
 - responsive desktop / tablet / mobile behavior
 - reusable React component architecture
 
-### 02 — 🔌 Users, Projects & Tasks REST API
+### 02:🔌 Users, Projects & Tasks REST API
 
 **Backend foundation.** Introduced the API contract used by every later stage.
 
@@ -143,7 +143,7 @@ Engineering included:
 - environment configuration
 - API examples and documentation
 
-### 03 — 🗄️ Persistent Relational Data Layer
+### 03: 🗄️ Persistent Relational Data Layer
 
 **From temporary data to real persistence.** Replaced in-memory data with a relational SQLite database.
 
@@ -166,7 +166,7 @@ users / projects / tasks
 Create data -> Stop server -> Restart server -> Data still exists
 ```
 
-### 04 — 🤖 AI-Powered Project & Task Management Platform
+### 04: 🤖 AI-Powered Project & Task Management Platform
 
 **Full-stack integration.** Brought every previous layer together with authentication, live analytics, activity tracking and local AI.
 
@@ -609,24 +609,24 @@ Then open a project in DevFlow and click **AI Generate**. The result is labelled
 ## 🌱 Roadmap
 
 ```text
-Phase 1 — Collaboration
+Phase 1: Collaboration
 Explicit task assignee selector
 Multi-user project collaboration
 Workload view
 
-Phase 2 — Awareness
+Phase 2: Awareness
 Calendar and deadline view
 Overdue-task detection
 Notifications
 Security alerts
 Dedicated audit-log page
 
-Phase 3 — Smarter Planning
+Phase 3: Smarter Planning
 AI task prioritization
 AI project summary
 AI productivity suggestions
 
-Phase 4 — Production Readiness
+Phase 4: Production Readiness
 Automated tests
 CI/CD
 Cloud deployment
@@ -708,7 +708,7 @@ SQLite keeps the project free, reproducible, persistent and independent of exter
 
 *Built for the Innovation Hacks Full Stack Development Internship.*
 
-⭐ **If you found the project useful or interesting, consider starring the repository.**
+
 
 
 
