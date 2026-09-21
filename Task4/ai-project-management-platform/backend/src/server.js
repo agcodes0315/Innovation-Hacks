@@ -8,7 +8,16 @@ import * as S from "./schemas.js";
 import { plan } from "./ai.js";
 
 const app=express();const port=Number(process.env.PORT||4000);
-app.use(cors({origin:process.env.CLIENT_ORIGIN||"http://localhost:5173"}));app.use(express.json({limit:"1mb"}));
+const allowedOrigin=process.env.CLIENT_ORIGIN||"http://localhost:5174";
+app.use(cors({
+ origin(origin,callback){
+  if(!origin)return callback(null,true);
+  const configured=origin===allowedOrigin;
+  const local=/^http:\/\/(localhost|127\.0\.0\.1):\d+$/.test(origin);
+  return configured||local?callback(null,true):callback(new Error(`CORS blocked origin: ${origin}`));
+ }
+}));
+app.use(express.json({limit:"1mb"}));
 const owned=(table,id,userId)=>{const row=db.prepare(`SELECT * FROM ${table} WHERE id=? AND owner_id=?`).get(id,userId);if(!row)throw new HttpError(404,`${table.slice(0,-1)} not found`);return row};
 
 app.get("/api/health",(req,res)=>res.json({status:"ok",task:4,database:"SQLite",auth:"JWT",ai:"Ollama local + explicit fallback"}));
