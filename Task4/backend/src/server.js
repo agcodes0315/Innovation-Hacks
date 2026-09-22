@@ -1,6 +1,8 @@
 import "dotenv/config";
+import express from "express";
 import app from "./express-app.js";
 import { startReminderEngine } from "./reminders.js";
+void express;
 
 const port = Number(process.env.PORT || 4000);
 
