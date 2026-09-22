@@ -654,31 +654,28 @@ For a larger production deployment, reasonable next steps would include PostgreS
 ## Agrima Saxena
 
 **Full-Stack Development · Backend Systems · Applied AI · Software Engineering**
-<table>
-<tr>
 
-<td width="60">
-<a href="https://www.linkedin.com/in/agrima-saxena-142960426/" title="LinkedIn">
-<img src="https://img.icons8.com/color/48/linkedin.png"
-     width="32"
-     height="32"
-     alt="LinkedIn"/>
-</a>
-</td>
+# 👩‍💻 Author
 
-<td width="60">
-<a href="mailto:agrimalc@gmail.com" title="Email">
-<img src="https://img.icons8.com/color/48/gmail-new.png"
-     width="32"
-     height="32"
-     alt="Email"/>
-</a>
-</td>
+## Agrima Saxena
 
-</tr>
-</table>
+**B.Tech Student · Full-Stack Development · Backend Systems · Applied AI · Software Engineering**
+
+I enjoy building practical software systems that combine **full-stack engineering, backend development, AI/ML, automation, and developer-focused products**.
+
+### 📬 Connect With Me
+
+[![GitHub](https://img.shields.io/badge/GitHub-agcodes0315-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/agcodes0315)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Agrima%20Saxena-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/agrima-saxena-142960426/)
+[![Email](https://img.shields.io/badge/Email-agrimalc%40gmail.com-EA4335?style=for-the-badge&logo=gmail&logoColor=white)](mailto:agrimalc@gmail.com)
+
+### 🔗 Project Links
+
+[![Repository](https://img.shields.io/badge/Repository-Innovation--Hacks-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/agcodes0315/Innovation-Hacks)
+
 ---
 
 ## Build. Innovate. Impact.
 
-**DevFlow turns project tracking into execution intelligence: ownership, dependencies, risk detection, proactive reminders, persistent context and private local AI in one developer workspace.**
+**DevFlow turns project tracking into execution intelligence: ownership, dependencies, risk detection, proactive reminders, persistent context, and private local AI, all within one developer workspace.**
+
