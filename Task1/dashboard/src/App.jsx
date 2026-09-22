@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   LayoutDashboard, FolderKanban, ListTodo, BarChart3, CalendarDays,
   Settings, Search, Plus, Clock3, CheckCircle2, Flame, Target,
@@ -31,7 +31,7 @@ export default function App() {
   const [seconds, setSeconds] = useState(25 * 60);
   const [running, setRunning] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!running) return;
     const id = setInterval(() => setSeconds(s => {
       if (s <= 1) { setRunning(false); return 25 * 60; }

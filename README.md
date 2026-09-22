@@ -1,300 +1,423 @@
 # ⚡ DevFlow
 
-## AI-Powered Developer Execution Workspace
+## Developer Execution Intelligence — Projects, Risk, Reminders & Local AI
 
-> **A local-first workspace that unifies project planning, task ownership, deadlines, progress, activity history, alerts, analytics, and AI-assisted execution.**
+> **A local-first full-stack workspace that helps developers turn project plans into execution, detect delivery risk early, and receive actionable reminders before deadlines become failures.**
 
-DevFlow was built as one connected product across the four **Innovation Hacks Full Stack Development Internship** tasks.
+[![React](https://img.shields.io/badge/Frontend-React%20%2B%20Vite-61DAFB?style=for-the-badge&logo=react&logoColor=111827)](#-tech-stack)
+[![Express](https://img.shields.io/badge/Backend-Node.js%20%2B%20Express-111827?style=for-the-badge&logo=express)](#-tech-stack)
+[![SQLite](https://img.shields.io/badge/Database-SQLite-0f80cc?style=for-the-badge&logo=sqlite)](#-persistent-data-layer)
+[![Ollama](https://img.shields.io/badge/AI-Local%20Ollama-74d3ae?style=for-the-badge)](#-local-ai)
+[![Internship](https://img.shields.io/badge/Innovation%20Hacks-Tasks%201--4-d9f27c?style=for-the-badge)](#-internship-task-progression)
 
 ---
 
 # 🌍 The Real-World Problem
 
-Developers and small teams often split execution across too many places: notes, task lists, calendars, project trackers, status updates, and separate AI tools.
+Software delivery problems are rarely caused by a missing to-do list. They happen because execution context is fragmented:
 
-That creates unnecessary context switching and makes basic questions harder to answer:
+- tasks live separately from project goals,
+- ownership is unclear,
+- dependencies are hidden,
+- overdue work is noticed too late,
+- overloaded developers keep receiving more work,
+- in-progress tasks silently become stale,
+- progress reports require manual effort,
+- AI suggestions live in separate chat windows and disappear from the actual workflow.
 
-```text
-What should I work on now?
-Who owns this task?
-What is overdue?
-How far along is this project?
-What changed recently?
-What needs attention?
-Can AI break this project into actionable work locally?
-```
+The result is **context switching, missed deadlines, blocked work, uneven workload, and poor visibility into project health**.
 
 ## 💡 DevFlow's Approach
 
-DevFlow treats this as an **execution-context problem**, not just a to-do-list problem.
+DevFlow treats this as an **execution intelligence problem**.
 
 ```text
-Projects
-   ↓
-Assigned Tasks + Priorities + Due Dates
-   ↓
+Project Context
+      ↓
+Assigned Tasks + Priorities + Deadlines
+      ↓
+Dependencies / Blockers
+      ↓
 Todo → In Progress → Done
-   ↓
-Live Progress + Analytics
-   ↓
-Activity History + Alerts
-   ↓
-Local AI-Assisted Planning
+      ↓
+Deterministic Risk Signals
+      ↓
+Project Health + Workload Intelligence
+      ↓
+In-App + Browser + Optional Email Reminders
+      ↓
+Local AI Explanation & Planning
 ```
+
+The key design principle is simple:
+
+> **Deterministic systems identify risk. AI explains and assists — it does not invent the underlying score.**
 
 ---
 
-# 🎓 Four-Task Internship Journey
+# 🎓 Internship Task Progression
+
+DevFlow was built as one product across the four **Innovation Hacks Full Stack Development Internship** tasks.
 
 | Task | Deliverable | DevFlow Implementation |
 |---|---|---|
-| **01** | Developer Productivity Dashboard | React/Vite responsive productivity UI |
-| **02** | Users, Projects & Tasks REST API | Express + Zod REST backend |
-| **03** | Persistent Data Layer | SQLite relational persistence |
-| **04** | AI-Powered Full-Stack Platform | Auth + CRUD + assignments + analytics + local AI |
-
-Rather than shipping four disconnected assignments, each task became the next layer of the same product:
+| **Task 1** | Developer Productivity Dashboard | Responsive React dashboard, navigation, project/task widgets, progress, analytics, calendar, loading/empty states |
+| **Task 2** | Users, Projects & Tasks REST API | Express API, CRUD, validation, search/filtering, centralized errors and HTTP status handling |
+| **Task 3** | Persistent Data Layer | SQLite relational persistence, foreign keys, constraints, indexes and durable CRUD |
+| **Task 4** | AI-Powered Project & Task Management Platform | Authentication, project/task execution, assignment, deadlines, analytics, reminders, risk intelligence and local AI |
 
 ```text
-Interface → API → Persistence → AI-Powered Full Stack Product
+Task 1: Interface
+        ↓
+Task 2: API
+        ↓
+Task 3: Persistence
+        ↓
+Task 4: Authenticated + AI-Assisted Execution Intelligence
 ```
 
 ---
 
-# 01 · 🖥️ Developer Productivity Dashboard
+# 🖥️ Product Experience
 
-Task 1 established the frontend foundation.
+The final Task 4 application contains these working areas:
 
-### Implemented
+```text
+WORKSPACE
+├── Overview
+├── Projects
+├── My Tasks
+├── Analytics
+├── Calendar
+├── Project Health
+├── AI Briefing
+├── Activity Log
+├── Notifications
+└── Settings
+```
 
-- dashboard / primary landing page
-- accessible sidebar navigation
-- user/profile section
-- project cards
-- task views
-- progress indicators
-- search
-- filtering
-- loading and empty states
+## Overview
+
+Shows live workspace information:
+
+- completed tasks
+- total tasks
+- overdue work
+- blocked work
+- daily execution briefing
+- project health snapshot
 - focus timer
-- analytics view
-- calendar view
-- responsive desktop/tablet/mobile behavior
-- reusable React components
-
----
-
-# 02 · 🔌 Users, Projects & Tasks REST API
-
-Task 2 introduced the application backend.
-
-## Users
-
-```text
-GET     /api/users
-GET     /api/users/:id
-POST    /api/users
-PATCH   /api/users/:id
-DELETE  /api/users/:id
-```
 
 ## Projects
 
-```text
-GET     /api/projects
-GET     /api/projects/:id
-POST    /api/projects
-PATCH   /api/projects/:id
-DELETE  /api/projects/:id
-```
+Users can:
+
+- create projects
+- edit projects
+- delete projects
+- track completion percentage
+- inspect deterministic health signals
+- generate project tasks using local AI
 
 ## Tasks
 
-```text
-GET     /api/tasks
-GET     /api/tasks/:id
-POST    /api/tasks
-PATCH   /api/tasks/:id
-PATCH   /api/tasks/:id/status
-DELETE  /api/tasks/:id
-```
+Each task can contain:
 
-### Backend Engineering
-
-- RESTful endpoint design
-- Zod request validation
-- centralized error handling
-- meaningful HTTP status codes
-- structured JSON responses
-- search/filter query support
-- environment configuration
-
----
-
-# 03 · 🗄️ Persistent Relational Data Layer
-
-Task 3 moves from temporary data to real persistence.
-
-```text
-Express REST API
-       ↓
-Node.js Data Layer
-       ↓
-SQLite
-       ↓
-Users / Projects / Tasks
-```
-
-### Data Model
-
-```text
-User
- ├── owns Projects
- └── can participate in task workflows
-
-Project
- ├── belongs to a User
- └── contains Tasks
-
-Task
- ├── belongs to a Project
- └── persists status / priority / due date
-```
-
-### Persistence Features
-
-- primary keys
-- unique email constraint
-- foreign keys
-- cascade behavior
-- task status constraints
-- priority constraints
-- indexes
-- schema-level validation
-- persistent file-backed storage
-
-### Persistence Proof
-
-```text
-Create data → Stop server → Restart server → Data still exists
-```
-
----
-
-# 04 · 🤖 AI-Powered Project & Task Management Platform
-
-Task 4 combines the previous layers into the final full-stack product.
-
-## 🔐 Authentication
-
-- registration
-- login
-- logout
-- bcrypt password hashing
-- JWT authentication
-- protected frontend routes
-- protected backend routes
-- authenticated workspace isolation
-
-## 📁 Project Management
-
-- create projects
-- view project details
-- edit projects
-- delete projects
-- project status
-- project task totals
-- live completion percentage
-
-## ✅ Task Management
-
-- create tasks
-- explicit assignee selection
-- workspace members
+- title and description
+- project
+- assignee
 - priority
 - due date
-- Todo / In Progress / Done
-- search
-- status filtering
-- priority filtering
-- assignment updates
-- persisted edits
-- delete tasks
-- overdue detection
+- workflow status
+- blocker / dependency
+- AI-generated flag
 
-## 📊 Analytics
+Supported workflow states:
 
-- completed task count
-- in-progress task count
-- overdue task count
-- active project count
-- task status distribution
-- priority distribution
-- workload by assignee
-
-## 📅 Calendar & Deadlines
-
-Tasks with due dates appear in a dedicated deadline view, with overdue work highlighted.
-
-## 🕒 Activity & Audit Log
-
-DevFlow records meaningful workspace events such as:
-
-- account creation
-- login
-- project creation/update/deletion
-- member creation
-- task creation/update/deletion
-- AI task generation
-
-This gives the application a persistent operational history rather than only showing current state.
-
-## 🔔 Notifications & Alerts
-
-DevFlow surfaces:
-
-- welcome notifications
-- project-created events
-- completed-task notices
-- overdue-task alerts
-- local-AI availability warnings
-- successful AI plan generation
+```text
+Todo → In Progress → Done
+```
 
 ---
 
-# 🧠 Local AI-Assisted Task Planning
+# 🔗 Task Dependencies & Blockers
 
-DevFlow converts project context into actionable project tasks.
+A task can depend on another task in the same project.
+
+```text
+Database Schema
+      ↓ blocks
+Authentication API
+      ↓ blocks
+Frontend Login Integration
+```
+
+DevFlow detects when the blocker is incomplete and marks downstream work as **BLOCKED**.
+
+This helps answer a real delivery question:
+
+> Which unfinished task is preventing other work from moving?
+
+---
+
+# ❤️ Project Health
+
+Project health is calculated using deterministic execution signals.
+
+Signals include:
+
+- completion percentage
+- overdue task count
+- tasks due soon
+- blocked tasks
+- stale in-progress tasks
+
+The resulting score is shown as:
+
+```text
+80–100  Healthy
+60–79   Watch
+0–59    At Risk
+```
+
+Example:
+
+```text
+AI Project Manager
+Health: 67 / 100 — WATCH
+
+72% complete
+2 overdue
+1 blocked
+1 due soon
+0 stale
+```
+
+The score is **not generated by an LLM**. Ollama can explain the score and suggest the next action without changing the deterministic result.
+
+---
+
+# 👥 Workload Intelligence
+
+Analytics includes task distribution by assignee.
+
+DevFlow flags workload pressure when an assignee has either:
+
+- 7+ active tasks, or
+- 4+ active high-priority tasks.
+
+This surfaces a common engineering-management problem before additional work is assigned.
+
+---
+
+# ⏰ Deadline & Reminder Engine
+
+The Task 4 backend contains a reminder engine that checks deadlines every 15 minutes while the server is running.
+
+It detects:
+
+```text
+Due tomorrow  → Task Due Soon
+Past due      → Overdue Task
+```
+
+Alerts can appear through three channels:
+
+```text
+Deadline Signal
+      ↓
+┌───────────────┬─────────────────────┬─────────────────────┐
+│ In-App Alert  │ Browser/OS Popup    │ Optional Email      │
+└───────────────┴─────────────────────┴─────────────────────┘
+```
+
+The reminder log prevents the same deadline event from repeatedly generating duplicate alerts.
+
+---
+
+# 🔔 Browser / Windows Popup Notifications
+
+The final frontend uses the browser Notification API.
+
+From **Settings** or **Notifications**, select:
+
+```text
+Enable browser alerts
+```
+
+When permission is granted, new unread DevFlow alerts can appear as desktop notifications while the web app is open.
+
+This requires no paid service.
+
+---
+
+# ✉️ Optional Email Reminders
+
+Email is optional. The entire project still works without SMTP credentials.
+
+When SMTP is configured, DevFlow supports:
+
+- due-soon email reminders
+- overdue email reminders
+- daily execution briefing
+- weekly execution summary
+- test email from Settings
+
+Add the following to:
+
+```text
+Task4/ai-project-management-platform/backend/.env
+```
+
+For Gmail SMTP:
+
+```env
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=465
+SMTP_SECURE=true
+SMTP_USER=your-email@gmail.com
+SMTP_PASS=your-google-app-password
+EMAIL_FROM=DevFlow <your-email@gmail.com>
+```
+
+> Use a Google **App Password**, not your normal Gmail password. Never commit `.env`.
+
+Email preferences can then be enabled from the DevFlow Settings page.
+
+---
+
+# 🧠 Daily Developer Briefing
+
+The deterministic briefing summarizes:
+
+- overdue tasks
+- tasks due soon
+- blocked tasks
+- stale in-progress tasks
+- recommended next tasks
+
+Example:
+
+```text
+2 overdue · 1 due soon · 1 blocked · 0 stale
+
+Recommended execution order
+1. Fix authentication API      High
+2. Complete database migration High
+3. Integrate login frontend    Medium
+```
+
+This gives the user a useful morning execution view without requiring AI.
+
+---
+
+# 🤖 Local AI
+
+DevFlow uses **Ollama** so AI can run locally without a paid cloud API.
+
+## AI Task Generation
 
 ```text
 Project Name + Description
           ↓
-Planning Prompt
+Local Ollama
           ↓
-Local Ollama Model
+Structured Engineering Tasks
           ↓
-Structured Tasks
+Persisted into SQLite
           ↓
-SQLite
-          ↓
-Project Workspace
+Normal DevFlow Workflow
 ```
 
-Default local configuration:
+## AI Project-Health Explanation
 
-```env
-OLLAMA_URL=http://localhost:11434
-OLLAMA_MODEL=llama3.2:3b
+The deterministic health score and risk counts are passed to Ollama.
+
+Ollama explains:
+
+- why the project is at risk,
+- what should be addressed first,
+- what action is most likely to unblock delivery.
+
+If Ollama is unavailable, DevFlow explicitly displays a deterministic fallback explanation instead of pretending that AI ran.
+
+---
+
+# 🧾 Activity & Audit Log
+
+Meaningful workspace events are persisted:
+
+- registration and login
+- project creation/update/deletion
+- task creation/update/deletion
+- member addition
+- AI generation
+- task completion
+
+The Activity Log gives the project the type of traceability normally expected in a real collaboration product.
+
+---
+
+# 🔐 Authentication & Security
+
+DevFlow includes:
+
+- registration
+- login/logout
+- bcrypt password hashing
+- JWT authentication
+- protected backend routes
+- protected frontend routes
+- Zod request validation
+- SQLite constraints
+- user-scoped project/task queries
+- `.env` configuration
+
+```text
+Credentials
+    ↓
+bcrypt
+    ↓
+JWT
+    ↓
+Protected API + Workspace
 ```
 
-### Honest Failure Handling
+---
 
-| Ollama state | UI label | Behavior |
-|---|---|---|
-| Available | `LOCAL AI` | Local model generates tasks |
-| Unavailable | `FALLBACK PLANNER` | Deterministic fallback plan is clearly labelled |
+# 🗄️ Persistent Data Layer
 
-Fallback output is never silently presented as AI-generated content.
+The final platform stores:
+
+```text
+users
+members
+projects
+tasks
+activities
+notifications
+preferences
+reminder_log
+digest_log
+```
+
+Relationships include:
+
+```text
+User
+ ├── Workspace Members
+ ├── Projects
+ ├── Activity
+ ├── Notifications
+ └── Preferences
+
+Project
+ └── Tasks
+      ├── Assignee
+      └── Optional Blocker Task
+```
+
+The SQLite database survives application/server restarts.
 
 ---
 
@@ -305,44 +428,26 @@ flowchart TD
     UI[React + Vite Frontend]
     API[Express REST API]
     AUTH[JWT + bcrypt]
-    VALIDATION[Zod Validation]
+    VALID[Zod Validation]
     DB[(SQLite)]
-    MEMBERS[Workspace Members]
-    AUDIT[Activity / Audit Log]
-    ALERTS[Notifications + Deadline Alerts]
-    ANALYTICS[Analytics]
+    HEALTH[Project Health Engine]
+    REMIND[Reminder Engine]
+    BROWSER[Browser Notifications]
+    EMAIL[Optional SMTP Email]
     AI[Local Ollama]
 
     UI --> API
     API --> AUTH
-    API --> VALIDATION
-    API --> MEMBERS
+    API --> VALID
     API --> DB
-    API --> AUDIT
-    API --> ALERTS
-    API --> ANALYTICS
+    API --> HEALTH
+    API --> REMIND
+    REMIND --> DB
+    REMIND --> EMAIL
+    UI --> BROWSER
     API --> AI
     AI --> DB
 ```
-
----
-
-# 🛡️ Key Engineering Decisions
-
-| Challenge | DevFlow approach |
-|---|---|
-| Password security | bcrypt hashing |
-| Protected application data | JWT authentication |
-| Invalid writes | Zod + SQLite constraints |
-| Durable state | SQLite persistence |
-| Visible task ownership | Workspace members + assignee selector |
-| Deadline awareness | Due dates + overdue detection |
-| Traceability | Activity & Audit Log |
-| Important changes | Notifications / alerts |
-| Paid AI dependency | Local Ollama |
-| AI outage | Explicit fallback planner |
-| Local setup complexity | No external DB service required |
-| Legacy local database changes | Automatic non-destructive SQLite migration |
 
 ---
 
@@ -350,83 +455,74 @@ flowchart TD
 
 | Layer | Technology |
 |---|---|
-| Frontend | React 18 + Vite |
+| Frontend | React + Vite |
 | Routing | React Router |
-| Styling | Custom responsive CSS |
+| UI | Custom responsive CSS |
 | Icons | Lucide React |
 | Backend | Node.js + Express |
 | Validation | Zod |
 | Authentication | JWT |
-| Password hashing | bcryptjs |
-| Database | SQLite via `node:sqlite` |
+| Password Hashing | bcryptjs |
+| Database | SQLite using Node `node:sqlite` |
+| Email | Nodemailer + optional SMTP |
+| Browser Alerts | Web Notification API |
 | AI | Ollama local model |
-| Configuration | dotenv / environment variables |
-| API style | REST |
+| Configuration | dotenv |
 
 ---
 
-# 📡 Final Task 4 API Surface
+# 📡 Task 4 API Surface
 
 ## Authentication
 
 | Method | Endpoint | Purpose |
 |---|---|---|
-| `POST` | `/api/auth/register` | Create account |
-| `POST` | `/api/auth/login` | Authenticate user |
-| `GET` | `/api/auth/me` | Current authenticated profile |
+| `POST` | `/api/auth/register` | Register |
+| `POST` | `/api/auth/login` | Login |
+| `GET` | `/api/auth/me` | Current authenticated user |
 
-## Dashboard
-
-| Method | Endpoint | Purpose |
-|---|---|---|
-| `GET` | `/api/dashboard` | Workspace statistics and recent activity |
-
-## Members
+## Workspace
 
 | Method | Endpoint | Purpose |
 |---|---|---|
-| `GET` | `/api/members` | Workspace assignees |
-| `POST` | `/api/members` | Add workspace member |
+| `GET` | `/api/dashboard` | Dashboard metrics |
+| `GET/POST` | `/api/members` | Workspace members |
+| `GET` | `/api/analytics` | Status, priority and workload analytics |
+| `GET` | `/api/project-health` | Deterministic project-health scores |
+| `GET` | `/api/briefing` | Daily execution briefing |
+| `GET` | `/api/activity` | Audit/activity history |
 
-## Projects
-
-| Method | Endpoint | Purpose |
-|---|---|---|
-| `GET` | `/api/projects` | List/search projects |
-| `GET` | `/api/projects/:id` | Project details and tasks |
-| `POST` | `/api/projects` | Create project |
-| `PATCH` | `/api/projects/:id` | Update project |
-| `DELETE` | `/api/projects/:id` | Delete project |
-
-## Tasks
+## Projects / Tasks
 
 | Method | Endpoint | Purpose |
 |---|---|---|
-| `GET` | `/api/tasks` | Search/filter tasks |
-| `POST` | `/api/tasks` | Create task |
-| `PATCH` | `/api/tasks/:id` | Update assignment/status/priority/etc. |
-| `DELETE` | `/api/tasks/:id` | Delete task |
+| `GET/POST` | `/api/projects` | List/create projects |
+| `GET/PATCH/DELETE` | `/api/projects/:id` | Project operations |
+| `GET/POST` | `/api/tasks` | Search/create tasks |
+| `PATCH/DELETE` | `/api/tasks/:id` | Update/delete tasks |
 
-## Product Intelligence
+## Notifications / Reminders
 
 | Method | Endpoint | Purpose |
 |---|---|---|
-| `GET` | `/api/activity` | Activity / audit history |
-| `GET` | `/api/notifications` | Alerts and notifications |
-| `PATCH` | `/api/notifications/:id/read` | Mark notification read |
-| `GET` | `/api/analytics` | Status/priority/workload analytics |
+| `GET` | `/api/notifications` | Notification center |
+| `PATCH` | `/api/notifications/:id/read` | Mark read |
+| `POST` | `/api/notifications/run-reminders` | Run deadline scan manually |
+| `GET/PATCH` | `/api/preferences` | Reminder preferences |
+| `POST` | `/api/reminders/test-email` | Test SMTP |
+| `POST` | `/api/reminders/daily-briefing` | Send daily briefing now |
+| `POST` | `/api/reminders/weekly-summary` | Send weekly summary now |
 
 ## AI
 
 | Method | Endpoint | Purpose |
 |---|---|---|
-| `POST` | `/api/ai/generate-tasks` | Generate and persist project tasks |
+| `POST` | `/api/ai/generate-tasks` | Generate project tasks |
+| `GET` | `/api/ai/project-health/:id` | Explain deterministic health using local AI |
 
 ---
 
 # 📁 Repository Structure
-
-The repository root intentionally stays simple:
 
 ```text
 Innovation-Hacks/
@@ -440,62 +536,47 @@ Innovation-Hacks/
 └── README.md
 ```
 
-No extra `START_HERE.md` files are required.
+The repository root remains deliberately clean. Task-specific code lives inside its respective task folder.
 
 ---
 
-# ▶️ Run the Entire Project
+# ▶️ Run the Entire Internship Project
 
-## Requirements
+## Requirement
 
 ```text
 Node.js 22.5+
 npm
-Ollama (optional for genuine local AI)
 ```
-
-## First Time Only
 
 From the repository root:
 
 ```powershell
 npm install
-```
-
-The root project uses npm workspaces, so the install covers Task 1, Task 2, Task 3, Task 4 backend, and Task 4 frontend.
-
-## Every Time After That
-
-```powershell
 npm run dev
 ```
 
-### Development URLs
+`npm install` also installs the Task 4 email dependency (`nodemailer`) through the workspace configuration.
+
+Services:
 
 | Component | URL |
 |---|---|
 | Task 1 Dashboard | `http://localhost:5173` |
-| Task 2 API | `http://localhost:4002/api/health` |
+| Task 2 REST API | `http://localhost:4002/api/health` |
 | Task 3 Persistent API | `http://localhost:4003/api/health` |
 | **Task 4 Final Product** | **`http://localhost:5174`** |
 | Task 4 Backend | `http://localhost:4004/api/health` |
 
-Stop everything with:
+Stop all services with:
 
 ```text
 Ctrl + C
 ```
 
-If an old Vite/Node process is holding a port on Windows, run:
-
-```powershell
-Get-Process node -ErrorAction SilentlyContinue | Stop-Process -Force
-npm run dev
-```
-
 ---
 
-# 🤖 Enable Genuine Local AI
+# 🤖 Run Ollama Locally
 
 ```powershell
 ollama pull llama3.2:3b
@@ -508,54 +589,63 @@ Verify:
 Invoke-RestMethod http://localhost:11434/api/tags
 ```
 
-Then open Task 4 → Projects → **AI Generate**.
+Then use **AI Generate** or **Project Health → Explain** inside DevFlow.
 
 ---
 
-# 🧪 Recommended Final Test
+# 🧪 Final Demo Checklist
 
-1. Register a new account.
-2. Create a project.
-3. Add a workspace member.
-4. Create tasks and assign them.
-5. Set priorities and due dates.
-6. Move tasks through Todo → In Progress → Done.
-7. Check dashboard progress updates.
-8. Test search and filters.
-9. Open Analytics.
-10. Open Calendar & Deadlines.
-11. Check Activity & Audit Log.
-12. Check Notifications & Alerts.
-13. Run Ollama and generate project tasks.
-14. Stop the backend.
-15. Restart with `npm run dev`.
-16. Confirm projects/tasks/account data still exist.
+A strong final demonstration should prove:
 
----
-
-# 🌱 Production Roadmap
-
-- richer multi-user collaboration
-- invitation workflow
-- role-based access control
-- comments and task discussions
-- file attachments
-- push/email notifications
-- automated testing
-- CI/CD
-- deployment
-- PostgreSQL migration for multi-instance production
-- AI prioritization
-- AI project summaries
-- productivity suggestions
+```text
+1. Register + login
+2. Create a project
+3. Add workspace members
+4. Create and assign tasks
+5. Add deadlines and priorities
+6. Add a task dependency / blocker
+7. Move Todo → In Progress → Done
+8. Show live project progress
+9. Show workload analytics
+10. Show Calendar and overdue detection
+11. Show Project Health score
+12. Show Activity & Audit Log
+13. Enable browser notifications
+14. Trigger deadline reminder scan
+15. Show optional email reminder (if SMTP configured)
+16. Run local Ollama AI generation
+17. Ask AI to explain project health
+18. Restart the backend and prove data persistence
+```
 
 ---
 
-# ⚠️ Scope
+# 📸 Showcase Screens
+
+Recommended portfolio / LinkedIn carousel screens:
+
+```text
+01 — Developer Execution Command Center
+02 — Assigned Task Workflow & Dependencies
+03 — Project Health & Delivery Risk
+04 — Workload Analytics
+05 — Calendar & Deadline Intelligence
+06 — Notifications & Reminder Channels
+07 — Activity & Audit Log
+08 — Daily AI Briefing
+09 — Local AI Project Planner
+10 — Persistent Data Architecture
+```
+
+---
+
+# 🚧 Scope
 
 DevFlow is an internship-scale full-stack product and local development prototype.
 
-SQLite keeps the application free, reproducible, persistent, and easy to run without an external database service. A larger distributed deployment would typically migrate the relational model to PostgreSQL or another server-managed database.
+SQLite and local Ollama keep the project reproducible and free to run. Browser notifications work without a paid service. Email reminders are optional and require SMTP credentials supplied through `.env`.
+
+For a larger production deployment, reasonable next steps would include PostgreSQL, background job queues, service workers/web push, OAuth, RBAC, automated testing, observability, CI/CD and cloud deployment.
 
 ---
 
@@ -572,4 +662,4 @@ SQLite keeps the application free, reproducible, persistent, and easy to run wit
 
 ## Build. Innovate. Impact.
 
-**DevFlow turns four internship assignments into one connected engineering product: interface → API → persistence → AI-assisted execution.**
+**DevFlow turns project tracking into execution intelligence: ownership, dependencies, risk detection, proactive reminders, persistent context and private local AI in one developer workspace.**

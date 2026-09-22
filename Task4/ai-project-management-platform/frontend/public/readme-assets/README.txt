@@ -1,10 +1,9 @@
-Suggested final screenshots:
+Place final screenshots here if you want to embed them in the repository README:
 01-dashboard.png
-02-projects.png
-03-task-workflow.png
-04-analytics.png
-05-calendar-deadlines.png
-06-activity-audit-log.png
-07-notifications-alerts.png
-08-local-ai.png
-09-responsive-mobile.png
+02-project-health.png
+03-task-dependencies.png
+04-notifications.png
+05-activity-log.png
+06-ai-briefing.png
+07-local-ai.png
+08-responsive-mobile.png
