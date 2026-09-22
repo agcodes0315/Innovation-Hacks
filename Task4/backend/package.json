@@ -10,10 +10,15 @@
     "postinstall": "prisma generate"
   },
   "engines": {
-    "node": ">=22.5"
+    "node": "22.x"
+  },
+  "allowScripts": {
+    "@prisma/client": true,
+    "prisma": true,
+    "@prisma/engines": true
   },
   "dependencies": {
-    "@prisma/client": "^6.19.0",
+    "@prisma/client": "6.19.0",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.6",
     "dotenv": "^16.6.1",
@@ -25,6 +30,6 @@
     "zod": "^3.25.76"
   },
   "devDependencies": {
-    "prisma": "^6.19.0"
+    "prisma": "6.19.0"
   }
 }
