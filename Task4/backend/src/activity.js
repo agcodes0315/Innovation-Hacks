@@ -1,15 +1,41 @@
-import { randomUUID } from "node:crypto";
-import { db } from "./db.js";
+import {
+  randomUUID,
+} from "node:crypto";
 
-export function logActivity(userId, type, message) {
-  db.prepare(`
-    INSERT INTO activities (id, user_id, type, message, created_at)
-    VALUES (?, ?, ?, ?, ?)
-  `).run(
-    `a-${randomUUID()}`,
-    userId,
-    type,
-    message,
-    new Date().toISOString()
+import {
+  execute,
+} from "./db.js";
+
+export async function logActivity(
+  userId,
+  type,
+  message
+) {
+  await execute(
+    `
+      INSERT INTO activities (
+        id,
+        user_id,
+        type,
+        message,
+        target,
+        created_at
+      )
+      VALUES (
+        $1,
+        $2,
+        $3,
+        $4,
+        NULL,
+        $5
+      )
+    `,
+    [
+      `a-${randomUUID()}`,
+      userId,
+      type,
+      message,
+      new Date().toISOString(),
+    ]
   );
 }
