@@ -15,10 +15,12 @@ import {
   notify,
   errorHandler,
 } from "./lib.js";
+
 import * as S from "./schemas.js";
 import { plan, explainHealth } from "./ai.js";
 import { projectHealth, dailyBriefing } from "./health.js";
 import { emailConfigured, sendEmail } from "./email.js";
+
 import {
   processReminders,
   sendDailyBriefingEmail,
@@ -33,16 +35,23 @@ const allowedOrigin =
 app.use(
   cors({
     origin(origin, cb) {
-      if (!origin) return cb(null, true);
+      if (!origin) {
+        return cb(null, true);
+      }
 
-      const ok =
+      const isAllowed =
         origin === allowedOrigin ||
         /^http:\/\/(localhost|127\.0\.0\.1):\d+$/.test(origin);
 
-      return ok
-        ? cb(null, true)
-        : cb(new Error(`CORS blocked origin: ${origin}`));
+      if (isAllowed) {
+        return cb(null, true);
+      }
+
+      return cb(
+        new Error(`CORS blocked origin: ${origin}`)
+      );
     },
+    credentials: true,
   })
 );
 
@@ -50,7 +59,9 @@ app.use(express.json({ limit: "1mb" }));
 
 const owned = (table, id, userId) => {
   const row = db
-    .prepare(`SELECT * FROM ${table} WHERE id=? AND owner_id=?`)
+    .prepare(
+      `SELECT * FROM ${table} WHERE id=? AND owner_id=?`
+    )
     .get(id, userId);
 
   if (!row) {
@@ -65,19 +76,25 @@ const owned = (table, id, userId) => {
 
 const taskOwned = (id, userId) => {
   const row = db
-    .prepare(
-      "SELECT t.* FROM tasks t JOIN projects p ON p.id=t.project_id WHERE t.id=? AND p.owner_id=?"
-    )
+    .prepare(`
+      SELECT t.*
+      FROM tasks t
+      JOIN projects p ON p.id=t.project_id
+      WHERE t.id=? AND p.owner_id=?
+    `)
     .get(id, userId);
 
   if (!row) {
-    throw new HttpError(404, "Task not found");
+    throw new HttpError(
+      404,
+      "Task not found"
+    );
   }
 
   return row;
 };
 
-app.get("/api/health", (req, res) =>
+app.get("/api/health", (req, res) => {
   res.json({
     status: "ok",
     task: 4,
@@ -88,318 +105,518 @@ app.get("/api/health", (req, res) =>
       ? "configured"
       : "optional / not configured",
     reminders: "enabled",
-  })
-);
+  });
+});
 
-app.post("/api/auth/register", async (req, res) => {
-  const d = parse(S.register, req.body);
 
-  if (
-    db
+
+app.post(
+  "/api/auth/register",
+  async (req, res) => {
+    const d = parse(
+      S.register,
+      req.body
+    );
+
+    const existing = db
       .prepare(
         "SELECT id FROM users WHERE lower(email)=lower(?)"
       )
-      .get(d.email)
-  ) {
-    throw new HttpError(
-      409,
-      "An account with this email already exists"
+      .get(d.email);
+
+    if (existing) {
+      throw new HttpError(
+        409,
+        "An account with this email already exists"
+      );
+    }
+
+    const id = uid("u");
+    const ts = now();
+
+    const hash =
+      await bcrypt.hash(
+        d.password,
+        12
+      );
+
+    db.prepare(`
+      INSERT INTO users(
+        id,
+        name,
+        email,
+        password_hash,
+        role,
+        created_at
+      )
+      VALUES(?,?,?,?,?,?)
+    `).run(
+      id,
+      d.name,
+      d.email,
+      hash,
+      "Developer",
+      ts
     );
-  }
 
-  const id = uid("u");
-  const ts = now();
-  const hash = await bcrypt.hash(d.password, 12);
-
-  db.prepare(
-    "INSERT INTO users(id,name,email,password_hash,role,created_at) VALUES(?,?,?,?,?,?)"
-  ).run(
-    id,
-    d.name,
-    d.email,
-    hash,
-    "Developer",
-    ts
-  );
-
-  db.prepare(
-    "INSERT INTO members(id,owner_id,name,email,role,created_at) VALUES(?,?,?,?,?,?)"
-  ).run(
-    uid("m"),
-    id,
-    d.name,
-    d.email,
-    "Developer",
-    ts
-  );
-
-  db.prepare(
-    "INSERT OR IGNORE INTO preferences(user_id,updated_at) VALUES(?,?)"
-  ).run(id, ts);
-
-  const user = db
-    .prepare(
-      "SELECT id,name,email,role,created_at FROM users WHERE id=?"
-    )
-    .get(id);
-
-  log(
-    id,
-    "account",
-    "Created a DevFlow account",
-    "Account"
-  );
-
-  notify(
-    id,
-    "welcome",
-    "Welcome to DevFlow",
-    "Your execution workspace is ready.",
-    "success"
-  );
-
-  res.status(201).json({
-    token: sign(user),
-    user,
-  });
-});
-
-app.post("/api/auth/login", async (req, res) => {
-  const d = parse(S.login, req.body);
-
-  const row = db
-    .prepare(
-      "SELECT * FROM users WHERE lower(email)=lower(?)"
-    )
-    .get(d.email);
-
-  if (
-    !row ||
-    !(await bcrypt.compare(
-      d.password,
-      row.password_hash
-    ))
-  ) {
-    throw new HttpError(
-      401,
-      "Invalid email or password"
+    db.prepare(`
+      INSERT INTO members(
+        id,
+        owner_id,
+        name,
+        email,
+        role,
+        created_at
+      )
+      VALUES(?,?,?,?,?,?)
+    `).run(
+      uid("m"),
+      id,
+      d.name,
+      d.email,
+      "Developer",
+      ts
     );
+
+    db.prepare(`
+      INSERT OR IGNORE INTO preferences(
+        user_id,
+        updated_at
+      )
+      VALUES(?,?)
+    `).run(
+      id,
+      ts
+    );
+
+    const user = db
+      .prepare(`
+        SELECT
+          id,
+          name,
+          email,
+          role,
+          created_at
+        FROM users
+        WHERE id=?
+      `)
+      .get(id);
+
+    log(
+      id,
+      "account",
+      "Created a DevFlow account",
+      "Account"
+    );
+
+    notify(
+      id,
+      "welcome",
+      "Welcome to DevFlow",
+      "Your execution workspace is ready.",
+      "success"
+    );
+
+    res.status(201).json({
+      token: sign(user),
+      user,
+    });
   }
+);
 
-  const user = {
-    id: row.id,
-    name: row.name,
-    email: row.email,
-    role: row.role,
-    created_at: row.created_at,
-  };
+app.post(
+  "/api/auth/login",
+  async (req, res) => {
+    const d = parse(
+      S.login,
+      req.body
+    );
 
-  log(
-    user.id,
-    "account",
-    "Signed in",
-    "Account"
-  );
+    const row = db
+      .prepare(
+        "SELECT * FROM users WHERE lower(email)=lower(?)"
+      )
+      .get(d.email);
 
-  res.json({
-    token: sign(user),
-    user,
-  });
-});
+    if (
+      !row ||
+      !(await bcrypt.compare(
+        d.password,
+        row.password_hash
+      ))
+    ) {
+      throw new HttpError(
+        401,
+        "Invalid email or password"
+      );
+    }
 
-app.get("/api/auth/me", auth, (req, res) => {
-  res.json(req.user);
-});
+    const user = {
+      id: row.id,
+      name: row.name,
+      email: row.email,
+      role: row.role,
+      created_at:
+        row.created_at,
+    };
 
-app.get("/api/dashboard", auth, (req, res) => {
-  const s = db
-    .prepare(`
-      SELECT
-        (SELECT COUNT(*) FROM projects WHERE owner_id=?) project_count,
-        (SELECT COUNT(*) FROM tasks t JOIN projects p ON p.id=t.project_id WHERE p.owner_id=?) task_count,
-        (SELECT COUNT(*) FROM tasks t JOIN projects p ON p.id=t.project_id WHERE p.owner_id=? AND t.status='done') completed_count,
-        (SELECT COUNT(*) FROM tasks t JOIN projects p ON p.id=t.project_id WHERE p.owner_id=? AND t.status='in-progress') in_progress_count,
-        (SELECT COUNT(*) FROM tasks t JOIN projects p ON p.id=t.project_id WHERE p.owner_id=? AND t.status!='done' AND t.due_date IS NOT NULL AND date(t.due_date)<date('now')) overdue_count,
-        (
-          SELECT COUNT(*)
-          FROM tasks t
-          JOIN projects p ON p.id=t.project_id
-          LEFT JOIN tasks b ON b.id=t.blocked_by_task_id
-          WHERE
-            p.owner_id=?
-            AND t.status!='done'
-            AND t.blocked_by_task_id IS NOT NULL
-            AND COALESCE(b.status,'todo')!='done'
-        ) blocked_count
-    `)
-    .get(
+    log(
+      user.id,
+      "account",
+      "Signed in",
+      "Account"
+    );
+
+    res.json({
+      token: sign(user),
+      user,
+    });
+  }
+);
+
+app.get(
+  "/api/auth/me",
+  auth,
+  (req, res) => {
+    res.json(req.user);
+  }
+);
+
+
+
+app.get(
+  "/api/dashboard",
+  auth,
+  (req, res) => {
+    const stats = db
+      .prepare(`
+        SELECT
+          (
+            SELECT COUNT(*)
+            FROM projects
+            WHERE owner_id=?
+          ) project_count,
+
+          (
+            SELECT COUNT(*)
+            FROM tasks t
+            JOIN projects p
+              ON p.id=t.project_id
+            WHERE p.owner_id=?
+          ) task_count,
+
+          (
+            SELECT COUNT(*)
+            FROM tasks t
+            JOIN projects p
+              ON p.id=t.project_id
+            WHERE
+              p.owner_id=?
+              AND t.status='done'
+          ) completed_count,
+
+          (
+            SELECT COUNT(*)
+            FROM tasks t
+            JOIN projects p
+              ON p.id=t.project_id
+            WHERE
+              p.owner_id=?
+              AND t.status='in-progress'
+          ) in_progress_count,
+
+          (
+            SELECT COUNT(*)
+            FROM tasks t
+            JOIN projects p
+              ON p.id=t.project_id
+            WHERE
+              p.owner_id=?
+              AND t.status!='done'
+              AND t.due_date IS NOT NULL
+              AND date(t.due_date)<date('now')
+          ) overdue_count,
+
+          (
+            SELECT COUNT(*)
+            FROM tasks t
+            JOIN projects p
+              ON p.id=t.project_id
+            LEFT JOIN tasks b
+              ON b.id=t.blocked_by_task_id
+            WHERE
+              p.owner_id=?
+              AND t.status!='done'
+              AND t.blocked_by_task_id IS NOT NULL
+              AND COALESCE(
+                b.status,
+                'todo'
+              )!='done'
+          ) blocked_count
+      `)
+      .get(
+        req.user.id,
+        req.user.id,
+        req.user.id,
+        req.user.id,
+        req.user.id,
+        req.user.id
+      );
+
+    const activities = db
+      .prepare(`
+        SELECT *
+        FROM activities
+        WHERE user_id=?
+        ORDER BY created_at DESC
+        LIMIT 8
+      `)
+      .all(req.user.id);
+
+    res.json({
+      stats,
+      activities,
+    });
+  }
+);
+
+
+app.get(
+  "/api/members",
+  auth,
+  (req, res) => {
+    const members = db
+      .prepare(`
+        SELECT *
+        FROM members
+        WHERE owner_id=?
+        ORDER BY created_at
+      `)
+      .all(req.user.id);
+
+    res.json(members);
+  }
+);
+
+app.post(
+  "/api/members",
+  auth,
+  (req, res) => {
+    const d = parse(
+      S.member,
+      req.body
+    );
+
+    const id = uid("m");
+    const ts = now();
+
+    db.prepare(`
+      INSERT INTO members(
+        id,
+        owner_id,
+        name,
+        email,
+        role,
+        created_at
+      )
+      VALUES(?,?,?,?,?,?)
+    `).run(
+      id,
       req.user.id,
+      d.name,
+      d.email,
+      d.role,
+      ts
+    );
+
+    log(
       req.user.id,
-      req.user.id,
-      req.user.id,
-      req.user.id,
+      "member",
+      `Added ${d.name} to the workspace`,
+      d.name
+    );
+
+    const member = db
+      .prepare(`
+        SELECT *
+        FROM members
+        WHERE id=?
+      `)
+      .get(id);
+
+    res
+      .status(201)
+      .json(member);
+  }
+);
+
+
+
+app.get(
+  "/api/projects",
+  auth,
+  (req, res) => {
+    const q =
+      `%${String(
+        req.query.q || ""
+      )}%`;
+
+    const status =
+      req.query.status || null;
+
+    const rows = db
+      .prepare(`
+        SELECT
+          p.*,
+          COUNT(t.id) task_count,
+          SUM(
+            CASE
+              WHEN t.status='done'
+              THEN 1
+              ELSE 0
+            END
+          ) done_count
+
+        FROM projects p
+
+        LEFT JOIN tasks t
+          ON t.project_id=p.id
+
+        WHERE
+          p.owner_id=?
+          AND (
+            ?='%%'
+            OR p.name LIKE ?
+            OR p.description LIKE ?
+          )
+          AND (
+            ? IS NULL
+            OR p.status=?
+          )
+
+        GROUP BY p.id
+        ORDER BY p.updated_at DESC
+      `)
+      .all(
+        req.user.id,
+        q,
+        q,
+        q,
+        status,
+        status
+      );
+
+    res.json(rows);
+  }
+);
+
+app.get(
+  "/api/projects/:id",
+  auth,
+  (req, res) => {
+    const project = owned(
+      "projects",
+      req.params.id,
       req.user.id
     );
 
-  const activities = db
-    .prepare(
-      "SELECT * FROM activities WHERE user_id=? ORDER BY created_at DESC LIMIT 8"
-    )
-    .all(req.user.id);
+    const tasks = db
+      .prepare(`
+        SELECT
+          t.*,
+          m.name assignee_name,
+          b.title blocker_title,
+          b.status blocker_status
 
-  res.json({
-    stats: s,
-    activities,
-  });
-});
+        FROM tasks t
 
-app.get("/api/members", auth, (req, res) => {
-  res.json(
-    db
-      .prepare(
-        "SELECT * FROM members WHERE owner_id=? ORDER BY created_at"
-      )
-      .all(req.user.id)
-  );
-});
+        LEFT JOIN members m
+          ON m.id=t.assignee_id
 
-app.post("/api/members", auth, (req, res) => {
-  const d = parse(S.member, req.body);
-  const id = uid("m");
-  const ts = now();
+        LEFT JOIN tasks b
+          ON b.id=t.blocked_by_task_id
 
-  db.prepare(
-    "INSERT INTO members(id,owner_id,name,email,role,created_at) VALUES(?,?,?,?,?,?)"
-  ).run(
-    id,
-    req.user.id,
-    d.name,
-    d.email,
-    d.role,
-    ts
-  );
+        WHERE t.project_id=?
 
-  log(
-    req.user.id,
-    "member",
-    `Added ${d.name} to the workspace`,
-    d.name
-  );
+        ORDER BY
+          t.created_at DESC
+      `)
+      .all(project.id);
 
-  res.status(201).json(
-    db
-      .prepare(
-        "SELECT * FROM members WHERE id=?"
-      )
-      .get(id)
-  );
-});
+    res.json({
+      ...project,
+      tasks,
+    });
+  }
+);
 
-app.get("/api/projects", auth, (req, res) => {
-  const q = `%${String(req.query.q || "")}%`;
-  const status = req.query.status || null;
-
-  const rows = db
-    .prepare(`
-      SELECT
-        p.*,
-        COUNT(t.id) task_count,
-        SUM(CASE WHEN t.status='done' THEN 1 ELSE 0 END) done_count
-      FROM projects p
-      LEFT JOIN tasks t ON t.project_id=p.id
-      WHERE
-        p.owner_id=?
-        AND (?='%%' OR p.name LIKE ? OR p.description LIKE ?)
-        AND (? IS NULL OR p.status=?)
-      GROUP BY p.id
-      ORDER BY p.updated_at DESC
-    `)
-    .all(
-      req.user.id,
-      q,
-      q,
-      q,
-      status,
-      status
+app.post(
+  "/api/projects",
+  auth,
+  (req, res) => {
+    const d = parse(
+      S.project,
+      req.body
     );
 
-  res.json(rows);
-});
+    const id = uid("p");
+    const ts = now();
 
-app.get("/api/projects/:id", auth, (req, res) => {
-  const p = owned(
-    "projects",
-    req.params.id,
-    req.user.id
-  );
-
-  const tasks = db
-    .prepare(`
-      SELECT
-        t.*,
-        m.name assignee_name,
-        b.title blocker_title,
-        b.status blocker_status
-      FROM tasks t
-      LEFT JOIN members m ON m.id=t.assignee_id
-      LEFT JOIN tasks b ON b.id=t.blocked_by_task_id
-      WHERE t.project_id=?
-      ORDER BY t.created_at DESC
-    `)
-    .all(p.id);
-
-  res.json({
-    ...p,
-    tasks,
-  });
-});
-
-app.post("/api/projects", auth, (req, res) => {
-  const d = parse(S.project, req.body);
-  const id = uid("p");
-  const ts = now();
-
-  db.prepare(
-    "INSERT INTO projects(id,owner_id,name,description,status,created_at,updated_at) VALUES(?,?,?,?,?,?,?)"
-  ).run(
-    id,
-    req.user.id,
-    d.name,
-    d.description,
-    d.status,
-    ts,
-    ts
-  );
-
-  log(
-    req.user.id,
-    "project",
-    `Created project "${d.name}"`,
-    d.name
-  );
-
-  notify(
-    req.user.id,
-    "project",
-    "Project created",
-    `${d.name} is ready for planning.`,
-    "success"
-  );
-
-  res.status(201).json(
-    db
-      .prepare(
-        "SELECT * FROM projects WHERE id=?"
+    db.prepare(`
+      INSERT INTO projects(
+        id,
+        owner_id,
+        name,
+        description,
+        status,
+        created_at,
+        updated_at
       )
-      .get(id)
-  );
-});
+      VALUES(?,?,?,?,?,?,?)
+    `).run(
+      id,
+      req.user.id,
+      d.name,
+      d.description,
+      d.status,
+      ts,
+      ts
+    );
+
+    log(
+      req.user.id,
+      "project",
+      `Created project "${d.name}"`,
+      d.name
+    );
+
+    notify(
+      req.user.id,
+      "project",
+      "Project created",
+      `${d.name} is ready for planning.`,
+      "success"
+    );
+
+    const project = db
+      .prepare(`
+        SELECT *
+        FROM projects
+        WHERE id=?
+      `)
+      .get(id);
+
+    res
+      .status(201)
+      .json(project);
+  }
+);
 
 app.patch(
   "/api/projects/:id",
   auth,
   (req, res) => {
-    const c = owned(
+    const current = owned(
       "projects",
       req.params.id,
       req.user.id
@@ -410,30 +627,45 @@ app.patch(
       req.body
     );
 
-    db.prepare(
-      "UPDATE projects SET name=?,description=?,status=?,updated_at=? WHERE id=?"
-    ).run(
-      d.name ?? c.name,
-      d.description ?? c.description,
-      d.status ?? c.status,
+    db.prepare(`
+      UPDATE projects
+      SET
+        name=?,
+        description=?,
+        status=?,
+        updated_at=?
+      WHERE id=?
+    `).run(
+      d.name ??
+        current.name,
+      d.description ??
+        current.description,
+      d.status ??
+        current.status,
       now(),
-      c.id
+      current.id
     );
 
     log(
       req.user.id,
       "project",
-      `Updated project "${d.name ?? c.name}"`,
-      d.name ?? c.name
+      `Updated project "${
+        d.name ??
+        current.name
+      }"`,
+      d.name ??
+        current.name
     );
 
-    res.json(
-      db
-        .prepare(
-          "SELECT * FROM projects WHERE id=?"
-        )
-        .get(c.id)
-    );
+    const updated = db
+      .prepare(`
+        SELECT *
+        FROM projects
+        WHERE id=?
+      `)
+      .get(current.id);
+
+    res.json(updated);
   }
 );
 
@@ -441,178 +673,272 @@ app.delete(
   "/api/projects/:id",
   auth,
   (req, res) => {
-    const c = owned(
+    const current = owned(
       "projects",
       req.params.id,
       req.user.id
     );
 
-    db.prepare(
-      "DELETE FROM projects WHERE id=?"
-    ).run(c.id);
+    db.prepare(`
+      DELETE FROM projects
+      WHERE id=?
+    `).run(current.id);
 
     log(
       req.user.id,
       "project",
-      `Deleted project "${c.name}"`,
-      c.name
+      `Deleted project "${current.name}"`,
+      current.name
     );
 
     res.status(204).end();
   }
 );
 
-app.get("/api/tasks", auth, (req, res) => {
-  const q = `%${String(req.query.q || "")}%`;
-  const status = req.query.status || null;
-  const priority = req.query.priority || null;
-  const projectId =
-    req.query.projectId || null;
 
-  const rows = db
-    .prepare(`
-      SELECT
-        t.*,
-        p.name project_name,
-        m.name assignee_name,
-        b.title blocker_title,
-        b.status blocker_status,
-        CASE
-          WHEN t.status!='done'
-          AND t.due_date IS NOT NULL
-          AND date(t.due_date)<date('now')
-          THEN 1 ELSE 0
-        END overdue,
-        CASE
-          WHEN t.status!='done'
-          AND t.blocked_by_task_id IS NOT NULL
-          AND COALESCE(b.status,'todo')!='done'
-          THEN 1 ELSE 0
-        END blocked,
-        CASE
-          WHEN t.status='in-progress'
-          AND julianday('now')-julianday(t.updated_at)>3
-          THEN 1 ELSE 0
-        END stale
-      FROM tasks t
-      JOIN projects p ON p.id=t.project_id
-      LEFT JOIN members m ON m.id=t.assignee_id
-      LEFT JOIN tasks b ON b.id=t.blocked_by_task_id
-      WHERE
-        p.owner_id=?
-        AND (?='%%' OR t.title LIKE ? OR t.description LIKE ?)
-        AND (? IS NULL OR t.status=?)
-        AND (? IS NULL OR t.priority=?)
-        AND (? IS NULL OR t.project_id=?)
-      ORDER BY
-        overdue DESC,
-        blocked DESC,
-        CASE t.priority
-          WHEN 'high' THEN 1
-          WHEN 'medium' THEN 2
-          ELSE 3
-        END,
-        t.created_at DESC
-    `)
-    .all(
-      req.user.id,
-      q,
-      q,
-      q,
-      status,
-      status,
-      priority,
-      priority,
-      projectId,
-      projectId
-    );
+app.get(
+  "/api/tasks",
+  auth,
+  (req, res) => {
+    const q =
+      `%${String(
+        req.query.q || ""
+      )}%`;
 
-  res.json(rows);
-});
+    const status =
+      req.query.status || null;
 
-app.post("/api/tasks", auth, (req, res) => {
-  const d = parse(S.task, req.body);
+    const priority =
+      req.query.priority || null;
 
-  const p = owned(
-    "projects",
-    d.projectId,
-    req.user.id
-  );
+    const projectId =
+      req.query.projectId ||
+      null;
 
-  if (
-    d.assigneeId &&
-    !db
-      .prepare(
-        "SELECT id FROM members WHERE id=? AND owner_id=?"
-      )
-      .get(
-        d.assigneeId,
-        req.user.id
-      )
-  ) {
-    throw new HttpError(
-      400,
-      "Assignee is not in this workspace"
-    );
+    const rows = db
+      .prepare(`
+        SELECT
+          t.*,
+          p.name project_name,
+          m.name assignee_name,
+          b.title blocker_title,
+          b.status blocker_status,
+
+          CASE
+            WHEN
+              t.status!='done'
+              AND t.due_date IS NOT NULL
+              AND date(t.due_date)<date('now')
+            THEN 1
+            ELSE 0
+          END overdue,
+
+          CASE
+            WHEN
+              t.status!='done'
+              AND t.blocked_by_task_id IS NOT NULL
+              AND COALESCE(
+                b.status,
+                'todo'
+              )!='done'
+            THEN 1
+            ELSE 0
+          END blocked,
+
+          CASE
+            WHEN
+              t.status='in-progress'
+              AND julianday('now')-julianday(t.updated_at)>3
+            THEN 1
+            ELSE 0
+          END stale
+
+        FROM tasks t
+
+        JOIN projects p
+          ON p.id=t.project_id
+
+        LEFT JOIN members m
+          ON m.id=t.assignee_id
+
+        LEFT JOIN tasks b
+          ON b.id=t.blocked_by_task_id
+
+        WHERE
+          p.owner_id=?
+
+          AND (
+            ?='%%'
+            OR t.title LIKE ?
+            OR t.description LIKE ?
+          )
+
+          AND (
+            ? IS NULL
+            OR t.status=?
+          )
+
+          AND (
+            ? IS NULL
+            OR t.priority=?
+          )
+
+          AND (
+            ? IS NULL
+            OR t.project_id=?
+          )
+
+        ORDER BY
+          overdue DESC,
+          blocked DESC,
+          CASE t.priority
+            WHEN 'high' THEN 1
+            WHEN 'medium' THEN 2
+            ELSE 3
+          END,
+          t.created_at DESC
+      `)
+      .all(
+        req.user.id,
+        q,
+        q,
+        q,
+        status,
+        status,
+        priority,
+        priority,
+        projectId,
+        projectId
+      );
+
+    res.json(rows);
   }
+);
 
-  if (d.blockedByTaskId) {
-    const b = taskOwned(
-      d.blockedByTaskId,
+app.post(
+  "/api/tasks",
+  auth,
+  (req, res) => {
+    const d = parse(
+      S.task,
+      req.body
+    );
+
+    const project = owned(
+      "projects",
+      d.projectId,
       req.user.id
     );
 
-    if (b.project_id !== p.id) {
-      throw new HttpError(
-        400,
-        "Blocker must belong to the same project"
-      );
+    if (d.assigneeId) {
+      const member = db
+        .prepare(`
+          SELECT id
+          FROM members
+          WHERE
+            id=?
+            AND owner_id=?
+        `)
+        .get(
+          d.assigneeId,
+          req.user.id
+        );
+
+      if (!member) {
+        throw new HttpError(
+          400,
+          "Assignee is not in this workspace"
+        );
+      }
     }
-  }
 
-  const id = uid("t");
-  const ts = now();
+    if (d.blockedByTaskId) {
+      const blocker =
+        taskOwned(
+          d.blockedByTaskId,
+          req.user.id
+        );
 
-  db.prepare(
-    "INSERT INTO tasks(id,project_id,assignee_id,blocked_by_task_id,title,description,status,priority,due_date,ai_generated,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,0,?,?)"
-  ).run(
-    id,
-    p.id,
-    d.assigneeId ?? null,
-    d.blockedByTaskId ?? null,
-    d.title,
-    d.description,
-    d.status,
-    d.priority,
-    d.dueDate || null,
-    ts,
-    ts
-  );
+      if (
+        blocker.project_id !==
+        project.id
+      ) {
+        throw new HttpError(
+          400,
+          "Blocker must belong to the same project"
+        );
+      }
+    }
 
-  log(
-    req.user.id,
-    "task",
-    `Created task "${d.title}"`,
-    d.title
-  );
+    const id = uid("t");
+    const ts = now();
 
-  res.status(201).json(
-    db
-      .prepare(
-        "SELECT * FROM tasks WHERE id=?"
+    db.prepare(`
+      INSERT INTO tasks(
+        id,
+        project_id,
+        assignee_id,
+        blocked_by_task_id,
+        title,
+        description,
+        status,
+        priority,
+        due_date,
+        ai_generated,
+        created_at,
+        updated_at
       )
-      .get(id)
-  );
-});
+      VALUES(
+        ?,?,?,?,?,?,?,?,?,
+        0,?,?
+      )
+    `).run(
+      id,
+      project.id,
+      d.assigneeId ??
+        null,
+      d.blockedByTaskId ??
+        null,
+      d.title,
+      d.description,
+      d.status,
+      d.priority,
+      d.dueDate ||
+        null,
+      ts,
+      ts
+    );
+
+    log(
+      req.user.id,
+      "task",
+      `Created task "${d.title}"`,
+      d.title
+    );
+
+    const task = db
+      .prepare(`
+        SELECT *
+        FROM tasks
+        WHERE id=?
+      `)
+      .get(id);
+
+    res
+      .status(201)
+      .json(task);
+  }
+);
 
 app.patch(
   "/api/tasks/:id",
   auth,
   (req, res) => {
-    const c = taskOwned(
-      req.params.id,
-      req.user.id
-    );
+    const current =
+      taskOwned(
+        req.params.id,
+        req.user.id
+      );
 
     const d = parse(
       S.task.partial(),
@@ -620,7 +946,8 @@ app.patch(
     );
 
     const projectId =
-      d.projectId ?? c.project_id;
+      d.projectId ??
+      current.project_id;
 
     owned(
       "projects",
@@ -629,33 +956,42 @@ app.patch(
     );
 
     const assignee =
-      d.assigneeId !== undefined
+      d.assigneeId !==
+      undefined
         ? d.assigneeId
-        : c.assignee_id;
+        : current.assignee_id;
 
-    if (
-      assignee &&
-      !db
-        .prepare(
-          "SELECT id FROM members WHERE id=? AND owner_id=?"
-        )
+    if (assignee) {
+      const member = db
+        .prepare(`
+          SELECT id
+          FROM members
+          WHERE
+            id=?
+            AND owner_id=?
+        `)
         .get(
           assignee,
           req.user.id
-        )
-    ) {
-      throw new HttpError(
-        400,
-        "Assignee is not in this workspace"
-      );
+        );
+
+      if (!member) {
+        throw new HttpError(
+          400,
+          "Assignee is not in this workspace"
+        );
+      }
     }
 
     const blocker =
-      d.blockedByTaskId !== undefined
+      d.blockedByTaskId !==
+      undefined
         ? d.blockedByTaskId
-        : c.blocked_by_task_id;
+        : current.blocked_by_task_id;
 
-    if (blocker === c.id) {
+    if (
+      blocker === current.id
+    ) {
       throw new HttpError(
         400,
         "A task cannot block itself"
@@ -663,12 +999,16 @@ app.patch(
     }
 
     if (blocker) {
-      const b = taskOwned(
-        blocker,
-        req.user.id
-      );
+      const blockerTask =
+        taskOwned(
+          blocker,
+          req.user.id
+        );
 
-      if (b.project_id !== projectId) {
+      if (
+        blockerTask.project_id !==
+        projectId
+      ) {
         throw new HttpError(
           400,
           "Blocker must belong to the same project"
@@ -676,28 +1016,47 @@ app.patch(
       }
     }
 
-    db.prepare(
-      "UPDATE tasks SET project_id=?,assignee_id=?,blocked_by_task_id=?,title=?,description=?,status=?,priority=?,due_date=?,updated_at=? WHERE id=?"
-    ).run(
+    db.prepare(`
+      UPDATE tasks
+      SET
+        project_id=?,
+        assignee_id=?,
+        blocked_by_task_id=?,
+        title=?,
+        description=?,
+        status=?,
+        priority=?,
+        due_date=?,
+        updated_at=?
+      WHERE id=?
+    `).run(
       projectId,
       assignee,
       blocker,
-      d.title ?? c.title,
-      d.description ?? c.description,
-      d.status ?? c.status,
-      d.priority ?? c.priority,
-      d.dueDate !== undefined
-        ? d.dueDate || null
-        : c.due_date,
+      d.title ??
+        current.title,
+      d.description ??
+        current.description,
+      d.status ??
+        current.status,
+      d.priority ??
+        current.priority,
+      d.dueDate !==
+      undefined
+        ? d.dueDate ||
+          null
+        : current.due_date,
       now(),
-      c.id
+      current.id
     );
 
     const title =
-      d.title ?? c.title;
+      d.title ??
+      current.title;
 
     const nextStatus =
-      d.status ?? c.status;
+      d.status ??
+      current.status;
 
     log(
       req.user.id,
@@ -707,8 +1066,10 @@ app.patch(
     );
 
     if (
-      nextStatus === "done" &&
-      c.status !== "done"
+      nextStatus ===
+        "done" &&
+      current.status !==
+        "done"
     ) {
       notify(
         req.user.id,
@@ -719,13 +1080,15 @@ app.patch(
       );
     }
 
-    res.json(
-      db
-        .prepare(
-          "SELECT * FROM tasks WHERE id=?"
-        )
-        .get(c.id)
-    );
+    const updated = db
+      .prepare(`
+        SELECT *
+        FROM tasks
+        WHERE id=?
+      `)
+      .get(current.id);
+
+    res.json(updated);
   }
 );
 
@@ -733,48 +1096,65 @@ app.delete(
   "/api/tasks/:id",
   auth,
   (req, res) => {
-    const c = taskOwned(
-      req.params.id,
-      req.user.id
-    );
+    const current =
+      taskOwned(
+        req.params.id,
+        req.user.id
+      );
 
-    db.prepare(
-      "UPDATE tasks SET blocked_by_task_id=NULL WHERE blocked_by_task_id=?"
-    ).run(c.id);
+    db.prepare(`
+      UPDATE tasks
+      SET blocked_by_task_id=NULL
+      WHERE blocked_by_task_id=?
+    `).run(current.id);
 
-    db.prepare(
-      "DELETE FROM tasks WHERE id=?"
-    ).run(c.id);
+    db.prepare(`
+      DELETE FROM tasks
+      WHERE id=?
+    `).run(current.id);
 
     log(
       req.user.id,
       "task",
-      `Deleted task "${c.title}"`,
-      c.title
+      `Deleted task "${current.title}"`,
+      current.title
     );
 
     res.status(204).end();
   }
 );
 
+
+
 app.get(
   "/api/activity",
   auth,
   (req, res) => {
     const type =
-      req.query.type || null;
+      req.query.type ||
+      null;
 
-    res.json(
-      db
-        .prepare(
-          "SELECT * FROM activities WHERE user_id=? AND (? IS NULL OR type=?) ORDER BY created_at DESC LIMIT 100"
-        )
-        .all(
-          req.user.id,
-          type,
-          type
-        )
-    );
+    const rows = db
+      .prepare(`
+        SELECT *
+        FROM activities
+        WHERE
+          user_id=?
+          AND (
+            ? IS NULL
+            OR type=?
+          )
+        ORDER BY
+          created_at DESC
+        LIMIT 100
+      `)
+      .all(
+        req.user.id,
+        type,
+        type
+      );
+
+    res.json(rows);
   }
 );
 
@@ -782,13 +1162,17 @@ app.get(
   "/api/notifications",
   auth,
   (req, res) => {
-    res.json(
-      db
-        .prepare(
-          "SELECT * FROM notifications WHERE user_id=? ORDER BY created_at DESC LIMIT 100"
-        )
-        .all(req.user.id)
-    );
+    const rows = db
+      .prepare(`
+        SELECT *
+        FROM notifications
+        WHERE user_id=?
+        ORDER BY created_at DESC
+        LIMIT 100
+      `)
+      .all(req.user.id);
+
+    res.json(rows);
   }
 );
 
@@ -796,9 +1180,13 @@ app.patch(
   "/api/notifications/:id/read",
   auth,
   (req, res) => {
-    db.prepare(
-      "UPDATE notifications SET is_read=1 WHERE id=? AND user_id=?"
-    ).run(
+    db.prepare(`
+      UPDATE notifications
+      SET is_read=1
+      WHERE
+        id=?
+        AND user_id=?
+    `).run(
       req.params.id,
       req.user.id
     );
@@ -826,24 +1214,34 @@ app.get(
   auth,
   (req, res) => {
     const p = db
-      .prepare(
-        "SELECT * FROM preferences WHERE user_id=?"
-      )
+      .prepare(`
+        SELECT *
+        FROM preferences
+        WHERE user_id=?
+      `)
       .get(req.user.id);
 
     res.json({
-      browserNotifications: Boolean(
-        p?.browser_notifications
-      ),
-      emailReminders: Boolean(
-        p?.email_reminders
-      ),
-      dailyBriefing: Boolean(
-        p?.daily_briefing
-      ),
-      weeklySummary: Boolean(
-        p?.weekly_summary
-      ),
+      browserNotifications:
+        Boolean(
+          p?.browser_notifications
+        ),
+
+      emailReminders:
+        Boolean(
+          p?.email_reminders
+        ),
+
+      dailyBriefing:
+        Boolean(
+          p?.daily_briefing
+        ),
+
+      weeklySummary:
+        Boolean(
+          p?.weekly_summary
+        ),
+
       emailConfigured:
         emailConfigured(),
     });
@@ -861,10 +1259,14 @@ app.patch(
 
     const p =
       db
-        .prepare(
-          "SELECT * FROM preferences WHERE user_id=?"
-        )
-        .get(req.user.id) || {};
+        .prepare(`
+          SELECT *
+          FROM preferences
+          WHERE user_id=?
+        `)
+        .get(
+          req.user.id
+        ) || {};
 
     db.prepare(`
       INSERT INTO preferences(
@@ -876,31 +1278,46 @@ app.patch(
         updated_at
       )
       VALUES(?,?,?,?,?,?)
+
       ON CONFLICT(user_id)
       DO UPDATE SET
-        browser_notifications=excluded.browser_notifications,
-        email_reminders=excluded.email_reminders,
-        daily_briefing=excluded.daily_briefing,
-        weekly_summary=excluded.weekly_summary,
-        updated_at=excluded.updated_at
+        browser_notifications=
+          excluded.browser_notifications,
+
+        email_reminders=
+          excluded.email_reminders,
+
+        daily_briefing=
+          excluded.daily_briefing,
+
+        weekly_summary=
+          excluded.weekly_summary,
+
+        updated_at=
+          excluded.updated_at
     `).run(
       req.user.id,
+
       d.browserNotifications ??
         Boolean(
           p.browser_notifications
         ),
+
       d.emailReminders ??
         Boolean(
           p.email_reminders
         ),
+
       d.dailyBriefing ??
         Boolean(
           p.daily_briefing
         ),
+
       d.weeklySummary ??
         Boolean(
           p.weekly_summary
         ),
+
       now()
     );
 
@@ -910,6 +1327,8 @@ app.patch(
   }
 );
 
+
+
 app.get(
   "/api/reminders/status",
   auth,
@@ -917,6 +1336,7 @@ app.get(
     res.json({
       emailConfigured:
         emailConfigured(),
+
       smtpHost:
         process.env.SMTP_HOST ||
         "smtp.gmail.com",
@@ -928,11 +1348,12 @@ app.post(
   "/api/reminders/test-email",
   auth,
   async (req, res) => {
-    const result = await sendEmail(
-      req.user.email,
-      "DevFlow test reminder",
-      "Email reminders are configured correctly for your DevFlow workspace."
-    );
+    const result =
+      await sendEmail(
+        req.user.email,
+        "DevFlow test reminder",
+        "Email reminders are configured correctly for your DevFlow workspace."
+      );
 
     res.json(result);
   }
@@ -942,11 +1363,12 @@ app.post(
   "/api/reminders/daily-briefing",
   auth,
   async (req, res) => {
-    res.json(
+    const result =
       await sendDailyBriefingEmail(
         req.user.id
-      )
-    );
+      );
+
+    res.json(result);
   }
 );
 
@@ -954,13 +1376,15 @@ app.post(
   "/api/reminders/weekly-summary",
   auth,
   async (req, res) => {
-    res.json(
+    const result =
       await sendWeeklySummaryEmail(
         req.user.id
-      )
-    );
+      );
+
+    res.json(result);
   }
 );
+
 
 app.get(
   "/api/analytics",
@@ -972,7 +1396,8 @@ app.get(
           t.status label,
           COUNT(*) value
         FROM tasks t
-        JOIN projects p ON p.id=t.project_id
+        JOIN projects p
+          ON p.id=t.project_id
         WHERE p.owner_id=?
         GROUP BY t.status
       `)
@@ -984,7 +1409,8 @@ app.get(
           t.priority label,
           COUNT(*) value
         FROM tasks t
-        JOIN projects p ON p.id=t.project_id
+        JOIN projects p
+          ON p.id=t.project_id
         WHERE p.owner_id=?
         GROUP BY t.priority
       `)
@@ -993,8 +1419,13 @@ app.get(
     const members = db
       .prepare(`
         SELECT
-          COALESCE(m.name,'Unassigned') label,
+          COALESCE(
+            m.name,
+            'Unassigned'
+          ) label,
+
           COUNT(t.id) value,
+
           SUM(
             CASE
               WHEN t.status!='done'
@@ -1002,27 +1433,39 @@ app.get(
               ELSE 0
             END
           ) active,
+
           SUM(
             CASE
-              WHEN t.status!='done'
-              AND t.priority='high'
+              WHEN
+                t.status!='done'
+                AND t.priority='high'
               THEN 1
               ELSE 0
             END
           ) high_active
+
         FROM tasks t
-        JOIN projects p ON p.id=t.project_id
-        LEFT JOIN members m ON m.id=t.assignee_id
+
+        JOIN projects p
+          ON p.id=t.project_id
+
+        LEFT JOIN members m
+          ON m.id=t.assignee_id
+
         WHERE p.owner_id=?
+
         GROUP BY m.name
         ORDER BY active DESC
       `)
       .all(req.user.id)
       .map((x) => ({
         ...x,
+
         overloaded:
           Number(x.active) >= 7 ||
-          Number(x.high_active) >= 4,
+          Number(
+            x.high_active
+          ) >= 4,
       }));
 
     res.json({
@@ -1033,12 +1476,15 @@ app.get(
   }
 );
 
+
 app.get(
   "/api/project-health",
   auth,
   (req, res) => {
     res.json(
-      projectHealth(req.user.id)
+      projectHealth(
+        req.user.id
+      )
     );
   }
 );
@@ -1048,32 +1494,43 @@ app.get(
   auth,
   (req, res) => {
     res.json(
-      dailyBriefing(req.user.id)
+      dailyBriefing(
+        req.user.id
+      )
     );
   }
 );
+
 
 app.post(
   "/api/ai/generate-tasks",
   auth,
   async (req, res) => {
-    const d = parse(S.ai, req.body);
+    const d = parse(
+      S.ai,
+      req.body
+    );
 
-    const p = owned(
+    const project = owned(
       "projects",
       d.projectId,
       req.user.id
     );
 
-    const result = await plan(
-      p,
-      d.count
-    );
+    const result =
+      await plan(
+        project,
+        d.count
+      );
 
     const member = db
-      .prepare(
-        "SELECT id FROM members WHERE owner_id=? ORDER BY created_at LIMIT 1"
-      )
+      .prepare(`
+        SELECT id
+        FROM members
+        WHERE owner_id=?
+        ORDER BY created_at
+        LIMIT 1
+      `)
       .get(req.user.id);
 
     const insert = db.prepare(`
@@ -1091,9 +1548,20 @@ app.post(
         created_at,
         updated_at
       )
+
       VALUES(
-        ?,?,?,NULL,?,?,
-        'todo',?,NULL,?,?,?
+        ?,
+        ?,
+        ?,
+        NULL,
+        ?,
+        ?,
+        'todo',
+        ?,
+        NULL,
+        ?,
+        ?,
+        ?
       )
     `);
 
@@ -1103,18 +1571,22 @@ app.post(
     db.exec("BEGIN");
 
     try {
-      for (const t of result.tasks) {
+      for (
+        const task
+        of result.tasks
+      ) {
         const id = uid("t");
 
         insert.run(
           id,
-          p.id,
-          member?.id || null,
-          t.title,
-          t.description,
-          t.priority,
+          project.id,
+          member?.id ||
+            null,
+          task.title,
+          task.description,
+          task.priority,
           result.mode ===
-          "local-ai"
+            "local-ai"
             ? 1
             : 0,
           ts,
@@ -1123,17 +1595,24 @@ app.post(
 
         saved.push(
           db
-            .prepare(
-              "SELECT * FROM tasks WHERE id=?"
-            )
+            .prepare(`
+              SELECT *
+              FROM tasks
+              WHERE id=?
+            `)
             .get(id)
         );
       }
 
-      db.exec("COMMIT");
-    } catch (e) {
-      db.exec("ROLLBACK");
-      throw e;
+      db.exec(
+        "COMMIT"
+      );
+    } catch (error) {
+      db.exec(
+        "ROLLBACK"
+      );
+
+      throw error;
     }
 
     log(
@@ -1142,43 +1621,54 @@ app.post(
       `Generated ${
         saved.length
       } tasks for "${
-        p.name
+        project.name
       }" using ${
         result.mode ===
         "local-ai"
           ? "local AI"
           : "fallback planner"
       }`,
-      p.name
+      project.name
     );
 
     notify(
       req.user.id,
       "ai",
+
       result.mode ===
       "local-ai"
         ? "AI plan generated"
         : "Local AI unavailable",
+
       result.mode ===
       "local-ai"
-        ? `${saved.length} tasks were generated locally for ${p.name}.`
+        ? `${saved.length} tasks were generated locally for ${project.name}.`
         : "Ollama was unavailable, so DevFlow used its fallback planner.",
+
       result.mode ===
       "local-ai"
         ? "success"
         : "warning"
     );
 
-    res.status(201).json({
-      mode: result.mode,
-      model: result.model,
-      tasks: saved,
-      message:
-        result.mode ===
-        "local-ai"
-          ? "Tasks generated by local Ollama."
-          : "Ollama unavailable; fallback planner used.",
-    });
+    res
+      .status(201)
+      .json({
+        mode:
+          result.mode,
+
+        model:
+          result.model,
+
+        tasks:
+          saved,
+
+        message:
+          result.mode ===
+          "local-ai"
+            ? "Tasks generated by local Ollama."
+            : "Ollama unavailable; fallback planner used.",
+      });
   }
 );
 
@@ -1192,26 +1682,38 @@ app.get(
       req.user.id
     );
 
-    const h = projectHealth(
-      req.user.id
-    ).find(
-      (x) =>
-        x.id === req.params.id
-    );
+    const health =
+      projectHealth(
+        req.user.id
+      ).find(
+        (x) =>
+          x.id ===
+          req.params.id
+      );
 
     res.json(
-      await explainHealth(h)
+      await explainHealth(
+        health
+      )
     );
   }
 );
 
-app.use((req, res) => {
-  res.status(404).json({
-    error: {
-      message: "Route not found",
-    },
-  });
-});
+
+app.use(
+  (req, res) => {
+    res
+      .status(404)
+      .json({
+        error: {
+          message:
+            "Route not found",
+        },
+      });
+  }
+);
+
+
 
 app.use(errorHandler);
 
