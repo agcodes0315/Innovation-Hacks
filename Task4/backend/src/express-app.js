@@ -15,10 +15,12 @@ import {
   notify,
   errorHandler,
 } from "./lib.js";
+
 import * as S from "./schemas.js";
 import { plan, explainHealth } from "./ai.js";
 import { projectHealth, dailyBriefing } from "./health.js";
 import { emailConfigured, sendEmail } from "./email.js";
+
 import {
   processReminders,
   sendDailyBriefingEmail,
@@ -33,7 +35,9 @@ const allowedOrigin =
 app.use(
   cors({
     origin(origin, cb) {
-      if (!origin) return cb(null, true);
+      if (!origin) {
+        return cb(null, true);
+      }
 
       const ok =
         origin === allowedOrigin ||
@@ -43,6 +47,7 @@ app.use(
         ? cb(null, true)
         : cb(new Error(`CORS blocked origin: ${origin}`));
     },
+    credentials: true,
   })
 );
 

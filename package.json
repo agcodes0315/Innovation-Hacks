@@ -1,22 +1,20 @@
-{
+﻿{
   "name": "innovation-hacks-devflow",
   "version": "3.0.0",
   "private": true,
   "workspaces": [
-    "Task1",
-    "Task2",
-    "Task3",
-    "Task4/backend",
-    "Task4/frontend"
+    "Task1/dashboard",
+    "Task2/users-projects-tasks-api",
+    "Task3/persistent-data-layer",
+    "Task4/ai-project-management-platform/backend",
+    "Task4/ai-project-management-platform/frontend"
   ],
   "scripts": {
-    "dev": "concurrently -n TASK1,TASK2,TASK3,TASK4-API,TASK4-WEB -c auto \"npm --prefix Task1 run dev -- --port 5173 --strictPort\" \"cross-env PORT=4002 npm --prefix Task2 run dev\" \"cross-env PORT=4003 npm --prefix Task3 run dev\" \"cross-env PORT=4004 CLIENT_ORIGIN=http://localhost:5174 npm --prefix Task4/backend run dev\" \"cross-env VITE_API_URL=http://localhost:4004/api npm --prefix Task4/frontend run dev -- --port 5174 --strictPort\"",
-    "build": "npm --prefix Task1 run build && npm --prefix Task4/frontend run build"
+    "dev": "concurrently -n TASK1,TASK2,TASK3,TASK4-API,TASK4-WEB -c auto \"npm --prefix Task1/dashboard run dev -- --port 5173 --strictPort\" \"cross-env PORT=4002 npm --prefix Task2/users-projects-tasks-api run dev\" \"cross-env PORT=4003 npm --prefix Task3/persistent-data-layer run dev\" \"cross-env PORT=4004 CLIENT_ORIGIN=http://localhost:5174 npm --prefix Task4/ai-project-management-platform/backend run dev\" \"cross-env VITE_API_URL=http://localhost:4004/api npm --prefix Task4/ai-project-management-platform/frontend run dev -- --port 5174 --strictPort\"",
+    "build": "npm --prefix Task1/dashboard run build && npm --prefix Task4/ai-project-management-platform/frontend run build"
   },
   "devDependencies": {
     "concurrently": "^9.1.2",
     "cross-env": "^7.0.3"
   }
 }
-
-
