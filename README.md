@@ -681,8 +681,6 @@ For a larger production deployment, reasonable next steps would include PostgreS
 
 ⭐ **If you found DevFlow useful or interesting, consider starring the repository.**
 
----
-
 ## 🔗 DevFlow is not just another task manager.
 
 **It is designed to help developers understand what needs attention before delivery problems become failures.**
