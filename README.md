@@ -658,12 +658,6 @@ For a larger production deployment, reasonable next steps would include PostgreS
 <table>
 <tr>
 <td width="60" align="center">
-<a href="https://www.linkedin.com/in/agrima-saxena-142960426/" title="LinkedIn">
-<img src="https://img.icons8.com/color/48/linkedin.png" width="32" height="32" alt="LinkedIn"/>
-</a>
-</td>
-
-<td width="60" align="center">
 <a href="mailto:agrimalc@gmail.com" title="Email">
 <img src="https://img.icons8.com/color/48/gmail-new.png" width="32" height="32" alt="Email"/>
 </a>
