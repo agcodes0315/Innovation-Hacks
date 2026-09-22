@@ -680,9 +680,3 @@ For a larger production deployment, reasonable next steps would include PostgreS
 *Built independently as a full-stack internship project for Innovation Hacks, progressing from dashboard design to REST APIs, persistent data, authentication, execution intelligence and local AI-assisted project management.*
 
 ⭐ **If you found DevFlow useful or interesting, consider starring the repository.**
-
-## 🔗 DevFlow is not just another task manager.
-
-**It is designed to help developers understand what needs attention before delivery problems become failures.**
-
-**Execution visibility · Dependency awareness · Delivery risk · Proactive reminders · Local AI assistance**
