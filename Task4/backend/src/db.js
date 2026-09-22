@@ -74,7 +74,7 @@ db.exec(`
     user_id TEXT NOT NULL,
     type TEXT NOT NULL,
     message TEXT NOT NULL,
-    entity TEXT,
+    target TEXT,
     created_at TEXT NOT NULL
   );
 
@@ -98,5 +98,11 @@ db.exec(`
     updated_at TEXT NOT NULL
   );
 `);
+
+try {
+  db.prepare("SELECT target FROM activities LIMIT 1").get();
+} catch {
+  db.exec("ALTER TABLE activities ADD COLUMN target TEXT");
+}
 
 export default db;
