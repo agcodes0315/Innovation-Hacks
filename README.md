@@ -1,8 +1,8 @@
 # ⚡ DevFlow
 
-## Developer Execution Intelligence: Projects, Risk, Reminders & Local AI
+### Developer Execution Intelligence: Projects, Risk, Reminders & Local AI
 
-> **A local-first full-stack workspace that helps developers turn project plans into execution, detect delivery risk early, and act before deadlines become failures.**
+**A local-first full-stack workspace that helps developers turn project plans into execution, detect delivery risk early, and act before deadlines become failures.**
 
 [![React](https://img.shields.io/badge/Frontend-React%20%2B%20Vite-61DAFB?style=for-the-badge&logo=react&logoColor=111827)](#-tech-stack)
 [![Express](https://img.shields.io/badge/Backend-Node.js%20%2B%20Express-111827?style=for-the-badge&logo=express)](#-tech-stack)
@@ -10,9 +10,21 @@
 [![Ollama](https://img.shields.io/badge/AI-Local%20Ollama-74d3ae?style=for-the-badge)](#-local-ai)
 [![Internship](https://img.shields.io/badge/Innovation%20Hacks-Tasks%201--4-d9f27c?style=for-the-badge)](#-internship-task-progression)
 
+<br/>
+
+**Independently designed and built across four progressive tasks of the Innovation Hacks Full Stack Development Internship, culminating in an authenticated, AI-assisted execution intelligence platform.**
+
 ---
 
-# 🌍 The Problem DevFlow Solves
+## 🎓 Project Context
+
+> **Built as a solo, four-task progression — from a static dashboard to a fully authenticated, AI-assisted execution intelligence platform.**
+
+DevFlow was independently developed as a **solo project** for the **Innovation Hacks Full Stack Development Internship**, evolving one product across four sequential deliverables rather than four disconnected exercises.
+
+---
+
+## 🚀 The Problem DevFlow Solves
 
 Modern software teams rarely fail because they lack a task list. They fail because execution context is scattered.
 
@@ -27,47 +39,21 @@ A developer may know what needs to be built, but still lack a clear answer to qu
 - How can a project manager understand delivery health without manually reading every task?
 - How can AI help without becoming the source of truth?
 
-Typical project tools record work. DevFlow is designed to **interpret execution signals** around that work, a single workspace covering:
+Typical project tools record work. **DevFlow is designed to interpret execution signals** around that work, a single workspace covering:
 
 ```text
 planning → ownership → dependencies → execution → risk detection → reminders → AI-assisted action
 ```
 
-## 💡 Core Product Idea
-
-```text
-Project Context
-      ↓
-Tasks + Assignees + Priorities + Deadlines
-      ↓
-Dependencies / Blockers
-      ↓
-Todo → In Progress → Done
-      ↓
-Deterministic Risk Signals
-      ↓
-Project Health + Workload Intelligence
-      ↓
-In-App + Browser + Optional Email Reminders
-      ↓
-Local AI Explanation & Planning
-```
-
-The key design principle is simple:
-
-> **Deterministic systems identify risk. AI explains and assists — it does not invent the underlying score.**
-
-That separation is intentional. Project-health signals are calculated from real workspace data; the local AI layer is then used to explain those signals, generate project tasks, and suggest next actions.
+**Design principle:** deterministic systems identify risk. AI explains and assists — it does not invent the underlying score.
 
 ---
 
-# 💼 Why This Matters
+## 💼 Why This Matters
 
 DevFlow targets a common operational problem in software delivery: teams often discover risk too late.
 
 Without execution visibility, organisations can spend time on manual project-status checks, repeated follow-ups, identifying who owns blocked work, discovering overdue tasks after deadlines pass, redistributing overloaded developers, rebuilding context across multiple tools, and creating repetitive project plans.
-
-DevFlow brings those signals together in one workflow.
 
 ### Potential Business Impact
 
@@ -87,9 +73,7 @@ DevFlow does not claim to replace enterprise project-management platforms. It de
 
 ---
 
-# 🎓 Internship Task Progression
-
-DevFlow was built as one product across the four **Innovation Hacks Full Stack Development Internship** tasks.
+## 🎓 Internship Task Progression
 
 | Task | Deliverable | DevFlow Implementation |
 |---|---|---|
@@ -110,7 +94,7 @@ Task 4: Authenticated + AI-Assisted Execution Intelligence
 
 ---
 
-# 🖥️ Product Experience
+## 🖥️ Product Experience
 
 The final Task 4 application contains these working areas:
 
@@ -128,43 +112,11 @@ WORKSPACE
 └── Settings
 ```
 
-## Overview
+**Overview** shows live workspace information: completed tasks, total tasks, overdue work, blocked work, daily execution briefing, project health snapshot, and a focus timer.
 
-Shows live workspace information:
+**Projects** let users create, edit, and delete projects, track completion percentage, inspect deterministic health signals, and generate project tasks using local AI.
 
-- completed tasks
-- total tasks
-- overdue work
-- blocked work
-- daily execution briefing
-- project health snapshot
-- focus timer
-
-## Projects
-
-Users can:
-
-- create projects
-- edit projects
-- delete projects
-- track completion percentage
-- inspect deterministic health signals
-- generate project tasks using local AI
-
-## Tasks
-
-Each task can contain:
-
-- title and description
-- project
-- assignee
-- priority
-- due date
-- workflow status
-- blocker / dependency
-- AI-generated flag
-
-Supported workflow states:
+**Tasks** support a title and description, project, assignee, priority, due date, workflow status, blocker/dependency, and an AI-generated flag, moving through:
 
 ```text
 Todo → In Progress → Done
@@ -172,7 +124,7 @@ Todo → In Progress → Done
 
 ---
 
-# 🔗 Task Dependencies & Blockers
+## 🔗 Task Dependencies & Blockers
 
 A task can depend on another task in the same project.
 
@@ -192,7 +144,7 @@ This helps answer a real delivery question:
 
 ---
 
-# ❤️ Project Health
+## ❤️ Project Health
 
 Project health is calculated using deterministic execution signals.
 
@@ -204,13 +156,13 @@ Signals include:
 - blocked tasks
 - stale in-progress tasks
 
-The resulting score is shown as:
+### Health Bands
 
-```text
-80–100  Healthy
-60–79   Watch
-0–59    At Risk
-```
+| Score Range | Status |
+|---|---|
+| `80 - 100` | Healthy |
+| `60 - 79` | Watch |
+| `0 - 59` | At Risk |
 
 Example:
 
@@ -225,11 +177,11 @@ Health: 67 / 100 WATCH
 0 stale
 ```
 
-The score is **not generated by an LLM**. Ollama receives the deterministic health result and can explain why the project is at risk and recommend the next practical action, without changing the underlying score.
+**Design principle:** the score is not generated by an LLM. Ollama receives the deterministic health result and can explain why the project is at risk and recommend the next practical action, without changing the underlying score.
 
 ---
 
-# 👥 Workload Intelligence
+## 👥 Workload Intelligence
 
 Analytics includes task distribution by assignee.
 
@@ -242,7 +194,7 @@ This surfaces a common engineering-management problem before additional work is 
 
 ---
 
-# ⏰ Deadline & Reminder Engine
+## ⏰ Deadline & Reminder Engine
 
 The Task 4 backend contains a reminder engine that checks deadlines every 15 minutes while the server is running.
 
@@ -267,7 +219,7 @@ The reminder log prevents the same deadline event from repeatedly generating dup
 
 ---
 
-# 🔔 Browser / Windows Popup Notifications
+## 🔔 Browser / Windows Popup Notifications
 
 The final frontend uses the browser Notification API.
 
@@ -277,13 +229,11 @@ From **Settings** or **Notifications**, select:
 Enable browser alerts
 ```
 
-When permission is granted, new unread DevFlow alerts can appear as desktop notifications while the web app is open.
-
-This requires no paid service.
+When permission is granted, new unread DevFlow alerts can appear as desktop notifications while the web app is open, requiring no paid service.
 
 ---
 
-# ✉️ Optional Email Reminders
+## ✉️ Optional Email Reminders
 
 Email is optional. The entire project still works without SMTP credentials.
 
@@ -318,7 +268,7 @@ Email preferences can then be enabled from the DevFlow Settings page.
 
 ---
 
-# 🧠 Daily Developer Briefing
+## 🧠 Daily Developer Briefing
 
 The deterministic briefing summarizes:
 
@@ -343,11 +293,11 @@ This gives the user a useful morning execution view without requiring AI.
 
 ---
 
-# 🤖 Local AI
+## 🤖 Local AI
 
 DevFlow uses **Ollama** so AI can run locally without a paid cloud API.
 
-## AI Task Generation
+### AI Task Generation
 
 ```text
 Project Name + Description
@@ -363,11 +313,9 @@ Normal DevFlow Workflow
 
 Generated tasks become normal project tasks, not temporary chat output that disappears once the conversation ends.
 
-## AI Project-Health Explanation
+### AI Project-Health Explanation
 
-The deterministic health score and risk counts are passed to Ollama.
-
-Ollama explains:
+The deterministic health score and risk counts are passed to Ollama. Ollama explains:
 
 - why the project is at risk,
 - what should be addressed first,
@@ -377,7 +325,7 @@ Successful local generation is labeled **LOCAL AI**. If Ollama is unavailable, D
 
 ---
 
-# 🧾 Activity & Audit Log
+## 🧾 Activity & Audit Log
 
 Meaningful workspace events are persisted:
 
@@ -392,20 +340,9 @@ The Activity Log gives the project the type of traceability normally expected in
 
 ---
 
-# 🔐 Authentication & Security
+## 🔐 Authentication & Security
 
-DevFlow includes:
-
-- registration
-- login/logout
-- bcrypt password hashing
-- JWT authentication
-- protected backend routes
-- protected frontend routes
-- Zod request validation
-- SQLite constraints
-- user-scoped project/task queries
-- `.env` configuration
+DevFlow includes registration, login/logout, bcrypt password hashing, JWT authentication, protected backend and frontend routes, Zod request validation, SQLite constraints, user-scoped project/task queries, and `.env` configuration.
 
 ```text
 Credentials
@@ -419,7 +356,7 @@ Protected API + Workspace
 
 ---
 
-# 🗄️ Persistent Data Layer
+## 🗄️ Persistent Data Layer
 
 The final platform stores:
 
@@ -455,7 +392,7 @@ The SQLite database survives application/server restarts.
 
 ---
 
-# 🏗️ Architecture
+## 🏗️ Architecture
 
 ```mermaid
 flowchart TD
@@ -485,7 +422,23 @@ flowchart TD
 
 ---
 
-# 🛠️ Tech Stack
+## ⚙️ Key Engineering Decisions
+
+| Challenge | DevFlow Approach |
+|---|---|
+| Risk must be visible before deadlines pass | Deterministic project-health scoring |
+| AI should not be the source of truth | Ollama explains scores, never generates them |
+| Cloud AI costs must not gate local demos | Local Ollama model execution |
+| Downstream work can silently stall | Task dependency + blocker detection |
+| Uneven workload goes unnoticed | Workload-pressure flags on assignees |
+| Deadlines get lost in a backlog | 15-minute reminder scan across three channels |
+| AI failures must be visible, not silent | Explicit LOCAL AI vs FALLBACK PLANNER labeling |
+| Actions need traceability | Persisted activity/audit log |
+| Data must survive restarts | SQLite relational persistence with constraints |
+
+---
+
+## 🛠️ Tech Stack
 
 | Layer | Technology |
 |---|---|
@@ -505,9 +458,9 @@ flowchart TD
 
 ---
 
-# 📡 Task 4 API Surface
+## 📡 API Surface
 
-## Authentication
+### Authentication
 
 | Method | Endpoint | Purpose |
 |---|---|---|
@@ -515,7 +468,7 @@ flowchart TD
 | `POST` | `/api/auth/login` | Login |
 | `GET` | `/api/auth/me` | Current authenticated user |
 
-## Workspace
+### Workspace
 
 | Method | Endpoint | Purpose |
 |---|---|---|
@@ -526,7 +479,7 @@ flowchart TD
 | `GET` | `/api/briefing` | Daily execution briefing |
 | `GET` | `/api/activity` | Audit/activity history |
 
-## Projects / Tasks
+### Projects / Tasks
 
 | Method | Endpoint | Purpose |
 |---|---|---|
@@ -535,7 +488,7 @@ flowchart TD
 | `GET/POST` | `/api/tasks` | Search/create tasks |
 | `PATCH/DELETE` | `/api/tasks/:id` | Update/delete tasks |
 
-## Notifications / Reminders
+### Notifications / Reminders
 
 | Method | Endpoint | Purpose |
 |---|---|---|
@@ -547,7 +500,7 @@ flowchart TD
 | `POST` | `/api/reminders/daily-briefing` | Send daily briefing now |
 | `POST` | `/api/reminders/weekly-summary` | Send weekly summary now |
 
-## AI
+### AI
 
 | Method | Endpoint | Purpose |
 |---|---|---|
@@ -556,7 +509,7 @@ flowchart TD
 
 ---
 
-# 📁 Repository Structure
+## 📁 Repository Structure
 
 ```text
 Innovation-Hacks/
@@ -580,9 +533,9 @@ The repository root remains deliberately clean. Task-specific code lives inside 
 
 ---
 
-# ▶️ Run the Entire Internship Project
+## ▶️ Run the Entire Internship Project
 
-## Requirement
+### Requirement
 
 ```text
 Node.js 22.5+
@@ -598,7 +551,7 @@ npm run dev
 
 `npm install` also installs the Task 4 email dependency (`nodemailer`) through the workspace configuration.
 
-Services:
+### Services
 
 | Component | URL |
 |---|---|
@@ -616,7 +569,7 @@ Ctrl + C
 
 ---
 
-# 🤖 Run Ollama Locally
+## 🤖 Run Ollama Locally
 
 Download the model:
 
@@ -646,7 +599,7 @@ Then use **AI Generate** or **Project Health → Explain** inside DevFlow.
 
 ---
 
-# 🎥 Recommended Demo Flow
+## 🎥 Recommended Demo Flow
 
 ```text
 1. Login
@@ -671,9 +624,9 @@ Then use **AI Generate** or **Project Health → Explain** inside DevFlow.
 
 ---
 
-# 📸 Showcase Screens
+## 📸 Showcase Screens
 
-Recommended portfolio / LinkedIn carousel screens:
+Recommended portfolio screens:
 
 ```text
 01  Developer Execution Command Center
@@ -690,30 +643,53 @@ Recommended portfolio / LinkedIn carousel screens:
 
 ---
 
-# 🚧 Scope & Production Evolution
+## 🎯 What This Project Demonstrates
 
-DevFlow is an internship-scale full-stack product and local development prototype.
+DevFlow brings together several engineering concerns:
 
-SQLite and local Ollama keep the project reproducible and free to run. Browser notifications work without a paid service. Email reminders are optional and require SMTP credentials supplied through `.env`.
-
-A larger production implementation could evolve toward:
-
-- PostgreSQL
-- background job queues
-- service workers / web push
-- OAuth
-- richer RBAC
-- automated testing
-- observability
-- CI/CD
-- cloud deployment
-- team-level historical delivery analytics
+- full-stack development
+- REST API design
+- relational data modeling and persistence
+- authentication and security
+- deterministic risk scoring
+- workload and delivery analytics
+- multi-channel notification systems
+- local AI integration
+- audit/activity logging
+- product and workflow design
 
 ---
 
-# 👩‍💻 Author
+## 🌱 Production Roadmap
 
-## Agrima Saxena
+A larger production implementation could evolve toward:
+
+```text
+PostgreSQL
+Background job queues
+Service workers / web push
+OAuth
+Richer RBAC
+Automated testing
+Observability
+CI/CD
+Cloud deployment
+Team-level historical delivery analytics
+```
+
+---
+
+## ⚠️ Scope
+
+DevFlow is an **internship-scale full-stack product and local development prototype**.
+
+SQLite and local Ollama keep the project reproducible and free to run. Browser notifications work without a paid service. Email reminders are optional and require SMTP credentials supplied through `.env`.
+
+---
+
+## 👩‍💻 Author
+
+### Agrima Saxena
 
 **Solo Developer · Full-Stack Engineering · AI/ML · Cloud · Security**
 
@@ -738,8 +714,6 @@ A larger production implementation could evolve toward:
 
 ⭐ **If you found DevFlow useful or interesting, consider starring the repository.**
 
----
+### Build. Innovate. Impact.
 
-## Build. Innovate. Impact.
-
-**DevFlow is not just another task manager. It is designed to help developers understand what needs attention before delivery problems become failures, execution visibility, dependency awareness, delivery risk, proactive reminders, and local AI assistance, all in one developer workspace.**
+**DevFlow is not just another task manager. It is designed to help developers understand what needs attention before delivery problems become failures — execution visibility, dependency awareness, delivery risk, proactive reminders, and local AI assistance, all in one developer workspace.**
