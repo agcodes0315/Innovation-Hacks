@@ -659,15 +659,56 @@ For a larger production deployment, reasonable next steps would include PostgreS
 
 ## Agrima Saxena
 
-**B.Tech Student · Full-Stack Development · Backend Systems · Applied AI · Software Engineering**
+# 👩‍💻 Author
 
-I enjoy building practical software systems that combine **full-stack engineering, backend development, AI/ML, automation, and developer-focused products**.
+## Agrima Saxena
 
-### 📬 Connect With Me
+**Solo Developer · Full-Stack Engineering · AI/ML · Backend Systems · Developer Productivity**
 
-[![GitHub](https://img.shields.io/badge/GitHub-agcodes0315-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/agcodes0315)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Agrima%20Saxena-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/agrima-saxena-142960426/)
-[![Email](https://img.shields.io/badge/Email-agrimalc%40gmail.com-EA4335?style=for-the-badge&logo=gmail&logoColor=white)](mailto:agrimalc@gmail.com)
+<table>
+<tr>
+
+<td width="60">
+<a href="https://www.linkedin.com/in/agrima-saxena-142960426/" title="LinkedIn">
+<img src="https://img.icons8.com/color/48/linkedin.png"
+     width="32"
+     height="32"
+     alt="LinkedIn"/>
+</a>
+</td>
+
+<td width="60">
+<a href="mailto:agrimalc@gmail.com" title="Email">
+<img src="https://img.icons8.com/color/48/gmail-new.png"
+     width="32"
+     height="32"
+     alt="Email"/>
+</a>
+</td>
+
+<td width="60">
+<a href="https://github.com/agcodes0315" title="GitHub">
+<img src="https://img.icons8.com/ios-glyphs/48/ffffff/github.png"
+     width="32"
+     height="32"
+     alt="GitHub"/>
+</a>
+</td>
+
+</tr>
+</table>
+
+*Built independently as a full-stack internship project for Innovation Hacks, progressing from dashboard design to REST APIs, persistent data, authentication, execution intelligence and local AI-assisted project management.*
+
+⭐ **If you found DevFlow useful or interesting, consider starring the repository.**
+
+---
+
+## 🔗 DevFlow is not just another task manager.
+
+**It is designed to help developers understand what needs attention before delivery problems become failures.**
+
+**Execution visibility · Dependency awareness · Delivery risk · Proactive reminders · Local AI assistance**
 
 ### 🔗 Project Links
 
