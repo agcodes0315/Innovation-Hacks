@@ -653,48 +653,27 @@ For a larger production deployment, reasonable next steps would include PostgreS
 
 ## Agrima Saxena
 
-**Full-Stack Development · Backend Systems · Applied AI · Software Engineering**
-
-# 👩‍💻 Author
-
-## Agrima Saxena
-
-# 👩‍💻 Author
-
-## Agrima Saxena
-
-**Solo Developer · Full-Stack Engineering · AI/ML · Backend Systems · Developer Productivity**
+**Solo Developer · Full-Stack Engineering · AI/ML · Cloud · Security**
 
 <table>
 <tr>
-
-<td width="60">
+<td width="60" align="center">
 <a href="https://www.linkedin.com/in/agrima-saxena-142960426/" title="LinkedIn">
-<img src="https://img.icons8.com/color/48/linkedin.png"
-     width="32"
-     height="32"
-     alt="LinkedIn"/>
+<img src="https://img.icons8.com/color/48/linkedin.png" width="32" height="32" alt="LinkedIn"/>
 </a>
 </td>
 
-<td width="60">
+<td width="60" align="center">
 <a href="mailto:agrimalc@gmail.com" title="Email">
-<img src="https://img.icons8.com/color/48/gmail-new.png"
-     width="32"
-     height="32"
-     alt="Email"/>
+<img src="https://img.icons8.com/color/48/gmail-new.png" width="32" height="32" alt="Email"/>
 </a>
 </td>
 
-<td width="60">
+<td width="60" align="center">
 <a href="https://github.com/agcodes0315" title="GitHub">
-<img src="https://img.icons8.com/ios-glyphs/48/ffffff/github.png"
-     width="32"
-     height="32"
-     alt="GitHub"/>
+<img src="https://img.icons8.com/ios-glyphs/48/ffffff/github.png" width="32" height="32" alt="GitHub"/>
 </a>
 </td>
-
 </tr>
 </table>
 
@@ -702,3 +681,10 @@ For a larger production deployment, reasonable next steps would include PostgreS
 
 ⭐ **If you found DevFlow useful or interesting, consider starring the repository.**
 
+---
+
+## 🔗 DevFlow is not just another task manager.
+
+**It is designed to help developers understand what needs attention before delivery problems become failures.**
+
+**Execution visibility · Dependency awareness · Delivery risk · Proactive reminders · Local AI assistance**
