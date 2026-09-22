@@ -702,21 +702,3 @@ For a larger production deployment, reasonable next steps would include PostgreS
 
 ⭐ **If you found DevFlow useful or interesting, consider starring the repository.**
 
----
-
-## 🔗 DevFlow is not just another task manager.
-
-**It is designed to help developers understand what needs attention before delivery problems become failures.**
-
-**Execution visibility · Dependency awareness · Delivery risk · Proactive reminders · Local AI assistance**
-
-### 🔗 Project Links
-
-[![Repository](https://img.shields.io/badge/Repository-Innovation--Hacks-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/agcodes0315/Innovation-Hacks)
-
----
-
-## Build. Innovate. Impact.
-
-**DevFlow turns project tracking into execution intelligence: ownership, dependencies, risk detection, proactive reminders, persistent context, and private local AI, all within one developer workspace.**
-
