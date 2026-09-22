@@ -654,10 +654,29 @@ For a larger production deployment, reasonable next steps would include PostgreS
 ## Agrima Saxena
 
 **Full-Stack Development · Backend Systems · Applied AI · Software Engineering**
+<table>
+<tr>
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Agrima_Saxena-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/agrima-saxena-142960426/)
-[![GitHub](https://img.shields.io/badge/GitHub-agcodes0315-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/agcodes0315)
+<td width="60">
+<a href="https://www.linkedin.com/in/agrima-saxena-142960426/" title="LinkedIn">
+<img src="https://img.icons8.com/color/48/linkedin.png"
+     width="32"
+     height="32"
+     alt="LinkedIn"/>
+</a>
+</td>
 
+<td width="60">
+<a href="mailto:agrimalc@gmail.com" title="Email">
+<img src="https://img.icons8.com/color/48/gmail-new.png"
+     width="32"
+     height="32"
+     alt="Email"/>
+</a>
+</td>
+
+</tr>
+</table>
 ---
 
 ## Build. Innovate. Impact.
