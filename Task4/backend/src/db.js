@@ -84,7 +84,7 @@ db.exec(`
     type TEXT NOT NULL,
     title TEXT NOT NULL,
     message TEXT NOT NULL,
-    level TEXT NOT NULL DEFAULT 'info',
+    severity TEXT NOT NULL DEFAULT 'info',
     is_read INTEGER NOT NULL DEFAULT 0,
     created_at TEXT NOT NULL
   );
@@ -103,6 +103,14 @@ try {
   db.prepare("SELECT target FROM activities LIMIT 1").get();
 } catch {
   db.exec("ALTER TABLE activities ADD COLUMN target TEXT");
+}
+
+try {
+  db.prepare("SELECT severity FROM notifications LIMIT 1").get();
+} catch {
+  db.exec(
+    "ALTER TABLE notifications ADD COLUMN severity TEXT NOT NULL DEFAULT 'info'"
+  );
 }
 
 export default db;
