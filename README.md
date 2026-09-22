@@ -18,7 +18,7 @@
 
 ## 🎓 Project Context
 
-> **Built as a solo, four-task progression — from a static dashboard to a fully authenticated, AI-assisted execution intelligence platform.**
+> **Built as a solo, four-task progression from a static dashboard to a fully authenticated, AI-assisted execution intelligence platform.**
 
 DevFlow was independently developed as a **solo project** for the **Innovation Hacks Full Stack Development Internship**, evolving one product across four sequential deliverables rather than four disconnected exercises.
 
@@ -45,7 +45,7 @@ Typical project tools record work. **DevFlow is designed to interpret execution 
 planning → ownership → dependencies → execution → risk detection → reminders → AI-assisted action
 ```
 
-**Design principle:** deterministic systems identify risk. AI explains and assists — it does not invent the underlying score.
+**Design principle:** deterministic systems identify risk. AI explains and assists it does not invent the underlying score.
 
 ---
 
@@ -716,4 +716,4 @@ SQLite and local Ollama keep the project reproducible and free to run. Browser n
 
 ### Build. Innovate. Impact.
 
-**DevFlow is not just another task manager. It is designed to help developers understand what needs attention before delivery problems become failures — execution visibility, dependency awareness, delivery risk, proactive reminders, and local AI assistance, all in one developer workspace.**
+**DevFlow is not just another task manager. It is designed to help developers understand what needs attention before delivery problems become failures execution visibility, dependency awareness, delivery risk, proactive reminders, and local AI assistance, all in one developer workspace.**
