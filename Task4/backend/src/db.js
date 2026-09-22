@@ -2,27 +2,26 @@ import fs from "node:fs";
 import path from "node:path";
 import Database from "better-sqlite3";
 
-const isVercel = Boolean(process.env.VERCEL);
+const runningOnVercel =
+  process.cwd().startsWith("/var/task") ||
+  Boolean(process.env.VERCEL) ||
+  Boolean(process.env.AWS_LAMBDA_FUNCTION_NAME);
 
-const dataDir = isVercel
-  ? "/tmp"
-  : path.resolve(process.cwd(), "data");
+const databaseFile =
+  process.env.DATABASE_FILE ||
+  (runningOnVercel
+    ? "/tmp/devflow-capstone.db"
+    : path.resolve(process.cwd(), "data", "devflow-capstone.db"));
 
-if (!fs.existsSync(dataDir)) {
-  fs.mkdirSync(dataDir, {
+const databaseDir = path.dirname(databaseFile);
+
+if (!fs.existsSync(databaseDir)) {
+  fs.mkdirSync(databaseDir, {
     recursive: true,
   });
 }
 
-const databaseFile =
-  process.env.DATABASE_FILE ||
-  path.join(
-    dataDir,
-    "devflow-capstone.db"
-  );
-
-export const db =
-  new Database(databaseFile);
+export const db = new Database(databaseFile);
 
 db.pragma("journal_mode = WAL");
 
